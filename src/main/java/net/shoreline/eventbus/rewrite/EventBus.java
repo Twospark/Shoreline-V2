@@ -107,6 +107,18 @@ public class EventBus
         }
     }
 
+    public void subscribe(Object object, boolean shouldSubscribe)
+    {
+        if (shouldSubscribe)
+        {
+            subscribe(object);
+        }
+        else
+        {
+            unsubscribe(object);
+        }
+    }
+
     /**
      * Registers a listener without a subscriber.
      * Note that the listener will remain active

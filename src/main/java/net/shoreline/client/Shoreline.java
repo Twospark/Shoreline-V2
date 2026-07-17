@@ -33,4 +33,19 @@ public class Shoreline
     {
         Loader.info(message, params);
     }
+
+    public static void error(String s, int error)
+    {
+        Loader.error("{} {}", s, error);
+    }
+
+    public static void error(String s, Exception e)
+    {
+        Loader.error("{}", s, e);
+    }
+
+    public static void error(String s)
+    {
+        Loader.error("{}", s);
+    }
 }
