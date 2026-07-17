@@ -1,0 +1,36 @@
+net.shoreline.client.ShorelineMod -> net.shoreline.client.bs:
+    void onInitializeClient() -> a
+net.shoreline.eventbus.Event -> net.shoreline.client.fR:
+
+net.shoreline.eventbus.EventBus -> net.shoreline.client.e:
+    net.shoreline.eventbus.EventBus INSTANCE -> a
+    java.util.Map event2InvokerMap -> b
+    java.lang.Object subscribe(java.lang.Object) -> a
+    java.lang.Object unsubscribe(java.lang.Object) -> b
+
+net.shoreline.eventbus.EventBus$Invoker -> net.shoreline.client.i:
+    void invoke(java.lang.Object) -> a
+
+net.shoreline.eventbus.EventBus$InvokerNode -> net.shoreline.client.n:
+    net.shoreline.eventbus.EventBus$InvokerNode next -> a
+    net.shoreline.eventbus.EventBus$Invoker invoker -> b
+    java.lang.Object subscriber -> c
+    java.lang.Integer priority -> d
+
+net.shoreline.loader.Loader -> net.shoreline.loader.give up:
+    java.lang.Object performVersionCheck(java.lang.Object) -> d
+    java.lang.Object showErrorWindow(java.lang.Object) -> b
+    java.lang.Object getResourceInternal(java.lang.Object) -> a
+
+net.shoreline.loader.mixin.MixinServiceExt -> net.shoreline.loader.a:
+    java.lang.Object getInternalClassBytes(java.lang.Object) -> a
+    java.lang.Object getInternalInputStream(java.lang.Object) -> b
+
+net.shoreline.loader.resource.ResourcePackExt -> net.shoreline.loader.b:
+    java.lang.Object getResourceInternal(java.lang.Object) -> a
+
+net.shoreline.loader.session.UserSession -> net.shoreline.loader.c:
+    java.lang.Object getUserInfo(java.lang.Object) -> a
+
+net.shoreline.loader.resource.ResourcePackExt -> net.shoreline.loader.b:
+    java.util.Set REGISTERED_SOUND_FILES -> d

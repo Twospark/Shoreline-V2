@@ -1,0 +1,49 @@
+-dontskipnonpubliclibraryclassmembers
+-dontshrink
+-dontoptimize
+-allowaccessmodification
+-useuniqueclassmembernames
+-repackageclasses net.shoreline.loader
+-keepattributes *Annotation*
+-adaptresourcefilecontents fabric.mod.json,mixins.shoreline.plugin.json
+-adaptclassstrings
+-dontnote
+-dontwarn
+
+-keepclassmembers class * extends java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+-keep,allowshrinking class net.shoreline.loader.Loader {
+    *** onInitializeClient(...);
+    *** onPreLaunch(...);
+    *** onLoad(...);
+    *** getRefMapperConfig(...);
+    *** shouldApplyMixin(...);
+    *** acceptTargets(...);
+    *** getMixins(...);
+    *** preApply(...);
+    *** postApply(...);
+}
+
+-keepclassmembers,allowshrinking class net.shoreline.loader.mixin.MixinServiceExt {
+    <methods>;
+}
+
+-keepclassmembers,allowshrinking class net.shoreline.loader.resource.ResourcePackExt {
+    <methods>;
+}
+
+-keepclassmembers,allowshrinking enum  * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclasseswithmembers,includedescriptorclasses,allowshrinking class * {
+    native <methods>;
+}

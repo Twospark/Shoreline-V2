@@ -1,8 +1,0 @@
-package net.shoreline.client.impl.event.gui.screen;
-
-import net.shoreline.eventbus.Event;
-import net.shoreline.eventbus.annotation.Cancelable;
-
-@Cancelable
-public class MouseDraggedEvent extends Event {
-}
