@@ -1,8 +1,8 @@
-package net.shoreline.eventbus.rewrite;
+package net.shoreline.eventbus;
 
-import net.shoreline.eventbus.rewrite.api.Listener;
-import net.shoreline.eventbus.rewrite.api.Subscribe;
-import net.shoreline.eventbus.rewrite.listener.LambdaFactoryListener;
+import net.shoreline.eventbus.api.Listener;
+import net.shoreline.eventbus.api.Subscribe;
+import net.shoreline.eventbus.listener.LambdaFactoryListener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

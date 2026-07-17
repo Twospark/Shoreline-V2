@@ -4,7 +4,7 @@ import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.BindSetting;
 import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.util.Bind;
-import net.shoreline.eventbus.rewrite.EventBus;
+import net.shoreline.eventbus.EventBus;
 
 public class Toggleable extends Module
 {

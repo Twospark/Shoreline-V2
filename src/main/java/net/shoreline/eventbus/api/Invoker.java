@@ -1,4 +1,4 @@
-package net.shoreline.eventbus.rewrite.api;
+package net.shoreline.eventbus.api;
 
 public interface Invoker<T>
 {

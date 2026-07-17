@@ -2,8 +2,8 @@ package net.shoreline.client.api.common;
 
 import net.shoreline.client.api.interfaces.Globals;
 import net.shoreline.client.api.interfaces.Identifiable;
-import net.shoreline.eventbus.rewrite.EventBus;
-import net.shoreline.eventbus.rewrite.api.Listener;
+import net.shoreline.eventbus.EventBus;
+import net.shoreline.eventbus.api.Listener;
 
 public class Feature implements Identifiable, Globals
 {

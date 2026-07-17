@@ -1,8 +1,8 @@
-package net.shoreline.eventbus.rewrite.listener;
+package net.shoreline.eventbus.listener;
 
-import net.shoreline.eventbus.rewrite.api.Invoker;
-import net.shoreline.eventbus.rewrite.api.Listener;
-import net.shoreline.eventbus.rewrite.api.Subscribe;
+import net.shoreline.eventbus.api.Invoker;
+import net.shoreline.eventbus.api.Listener;
+import net.shoreline.eventbus.api.Subscribe;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Method;

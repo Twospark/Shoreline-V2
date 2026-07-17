@@ -1,4 +1,4 @@
-package net.shoreline.eventbus.rewrite;
+package net.shoreline.eventbus;
 
 import lombok.Getter;
 import lombok.Setter;

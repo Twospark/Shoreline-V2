@@ -1,4 +1,4 @@
-package net.shoreline.eventbus.rewrite.api;
+package net.shoreline.eventbus.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
