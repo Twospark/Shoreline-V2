@@ -25,7 +25,7 @@ public class ModuleManager extends RegistryFeature<Module>
     @Subscribe
     public void onKeyboard(KeyboardEvent event)
     {
-        if (event.getAction() != 1)
+        if (event.getAction() != 1 || mc.screen != null)
         {
             return;
         }

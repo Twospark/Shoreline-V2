@@ -1,5 +1,6 @@
 package net.shoreline.client.api.setting;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class SettingBuilder<T>
@@ -12,11 +13,18 @@ public abstract class SettingBuilder<T>
     private String[] nameAliases;
     private T defaultValue;
     private Supplier<Boolean> visible;
+    private Consumer<T> observer;
 
     public SettingBuilder(String name)
     {
         this.name = name;
         this.description = "No description found!";
+    }
+
+    public SettingBuilder<T> setObserver(Consumer<T> observer)
+    {
+        this.observer = observer;
+        return this;
     }
 
     public SettingBuilder<T> setDescription(String description)
@@ -49,7 +57,7 @@ public abstract class SettingBuilder<T>
         return buildWithoutFactory(factory.create(name, description));
     }
 
-    public Setting<T> buildWithoutFactory(Setting<T> config)
+    public Setting<T> buildWithoutFactory(Setting<T> setting)
     {
         if (factory == null)
         {
@@ -58,16 +66,21 @@ public abstract class SettingBuilder<T>
 
         if (nameAliases != null)
         {
-            config.setAliases(nameAliases);
+            setting.setAliases(nameAliases);
+        }
+
+        if (observer != null)
+        {
+            setting.addObserver(observer);
         }
 
         if (defaultValue != null)
         {
-            config.setValue(defaultValue);
-            config.setDefaultValue(defaultValue);
+            setting.setValue(defaultValue);
+            setting.setDefaultValue(defaultValue);
         }
 
-        config.setVisible(visible);
-        return config;
+        setting.setVisible(visible);
+        return setting;
     }
 }

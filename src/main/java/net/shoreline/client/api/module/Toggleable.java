@@ -29,7 +29,21 @@ public class Toggleable extends Module
     public Toggleable(String name, String[] nameAliases, String description, Category category)
     {
         super(name, nameAliases, description, category);
-        enabled.addObserver(value -> EventBus.getInstance().subscribe(this, value));
+        enabled.addObserver(value ->
+        {
+            if (value)
+            {
+                EventBus.getInstance().subscribe(this);
+                onEnable();
+            }
+            else
+            {
+                EventBus.getInstance().unsubscribe(this);
+                onDisable();
+            }
+        });
+
+        reflectSettings();
     }
 
     public boolean isEnabled()

@@ -6,6 +6,7 @@ import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.config.impl.BindConfig;
 import net.shoreline.client.impl.config.impl.SettingContainerConfig;
 import net.shoreline.client.impl.event.ClientEvent;
+import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
 import net.shoreline.loader.Loader;
 
@@ -20,6 +21,7 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
     public ConfigManager()
     {
         super("Configs", new OrderedRegistry<>());
+        EventBus.getInstance().subscribe(this);
 
         Path runningDir = mc.gameDirectory.toPath();
         try
@@ -34,6 +36,7 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
             saveDirectory = runningDir;
         }
 
+        saveDirectory = saveDirectory.resolve("Shoreline");
         try
         {
             getRegistry().register(
