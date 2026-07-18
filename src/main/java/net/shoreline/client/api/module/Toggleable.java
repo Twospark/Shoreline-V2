@@ -70,6 +70,11 @@ public class Toggleable extends Module
         return bind.getValue();
     }
 
+    public void setBind(Bind bind)
+    {
+        this.bind.setValue(bind);
+    }
+
     protected void onDisable()
     {
 

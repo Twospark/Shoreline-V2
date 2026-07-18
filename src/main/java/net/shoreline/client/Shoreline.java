@@ -1,5 +1,6 @@
 package net.shoreline.client;
 
+import net.shoreline.client.impl.Managers;
 import net.shoreline.loader.Loader;
 
 /**
@@ -18,6 +19,7 @@ public class Shoreline
     public static void init()
     {
         info("Starting Shoreline...");
+        Managers.init();
     }
 
     public static void postInit()

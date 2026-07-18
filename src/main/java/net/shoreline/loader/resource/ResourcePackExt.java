@@ -1,14 +1,7 @@
 package net.shoreline.loader.resource;
 
 import net.fabricmc.fabric.api.resource.ModResourcePack;
-import net.fabricmc.fabric.impl.resource.loader.ModNioResourcePack;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.resource.InputSupplier;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ResourcePackInfo;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.resource.metadata.ResourceMetadataSerializer;
-import net.minecraft.util.Identifier;
 import net.shoreline.client.ShorelineMod;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +13,7 @@ import java.util.Set;
 /**
  * Allows resource loading by overwriting ModNioPack to dynamically open resources
  */
-@SuppressWarnings("UnstableApiUsage")
-public final class ResourcePackExt implements ResourcePack, ModResourcePack
+/* public final class ResourcePackExt implements ResourcePack, ModResourcePack
 {
     public static final Set<String> REGISTERED_SOUND_FILES = new HashSet<>();
     private final ModNioResourcePack parent;
@@ -117,3 +109,4 @@ public final class ResourcePackExt implements ResourcePack, ModResourcePack
         this.parent.close();
     }
 }
+*/

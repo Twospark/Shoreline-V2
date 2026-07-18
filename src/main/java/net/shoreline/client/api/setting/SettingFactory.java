@@ -2,6 +2,7 @@ package net.shoreline.client.api.setting;
 
 import lombok.RequiredArgsConstructor;
 import net.shoreline.client.api.setting.impl.*;
+import net.shoreline.client.api.setting.util.Bind;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class SettingFactory<T>
         FACTORIES.put(Void.class, SettingGroup::new);
         FACTORIES.put(String.class, StringSetting::new);
         FACTORIES.put(Enum.class, EnumSetting::new);
+        FACTORIES.put(Bind.class, BindSetting::new);
     }
 
     private final T value;

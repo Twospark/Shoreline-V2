@@ -3,6 +3,7 @@ package net.shoreline.client.api.setting.impl;
 import com.google.gson.JsonElement;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
+import net.shoreline.client.impl.command.util.SettingParser;
 
 public class EnumSetting<E extends Enum<E>> extends Setting<E>
 {
@@ -14,7 +15,7 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E>
     @Override
     public void fromJson(JsonElement element)
     {
-
+        SettingParser.parseString(this, element.getAsString());
     }
 
     @Override

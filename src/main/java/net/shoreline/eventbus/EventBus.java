@@ -21,7 +21,7 @@ public class EventBus
     /** A map of objects and their corresponding listeners. */
     private final Map<Object, List<Listener>> corr;
 
-    public EventBus()
+    private EventBus()
     {
         this.listeners = new ConcurrentHashMap<>();
         this.corr      = new ConcurrentHashMap<>();

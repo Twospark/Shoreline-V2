@@ -3,7 +3,8 @@
   "package": "net.shoreline.client.asm.mixins",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-
+    "MixinMinecraft",
+    "input.MixinKeyboardHandler"
   ],
   "injectors": {
     "defaultRequire": 1
