@@ -54,14 +54,14 @@ public abstract class SettingBuilder<T>
 
     public Setting<T> build()
     {
-        return buildWithoutFactory(factory.create(name, description));
+        return buildInternal(factory.create(name, description));
     }
 
-    public Setting<T> buildWithoutFactory(Setting<T> setting)
+    public Setting<T> buildInternal(Setting<T> setting)
     {
         if (factory == null)
         {
-            throw new IllegalStateException("Config has no default value!");
+            throw new IllegalStateException("Setting has no default value!");
         }
 
         if (nameAliases != null)

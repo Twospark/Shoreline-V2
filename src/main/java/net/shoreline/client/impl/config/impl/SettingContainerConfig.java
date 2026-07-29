@@ -2,6 +2,7 @@ package net.shoreline.client.impl.config.impl;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.registry.Registry;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.util.SettingContainer;
@@ -50,23 +51,27 @@ public class SettingContainerConfig<T extends SettingContainer>
         Path filepath = getPath();
         if (!Files.exists(filepath))
         {
+            Shoreline.error("er");
             return;
         }
 
         JsonObject object = parseJson(IOUtils.readFile(filepath), JsonObject.class);
         if (object == null)
         {
+            Shoreline.error("bruh");
             return;
         }
 
         for (Map.Entry<String, JsonElement> entry : object.entrySet())
         {
+            Shoreline.info("ee");
             T container = registry.get(entry.getKey());
             if (container == null)
             {
                 continue;
             }
 
+            Shoreline.error("found da mod atleast");
             JsonObject sObject = entry.getValue().getAsJsonObject();
             for (Map.Entry<String, JsonElement> element : sObject.entrySet())
             {
@@ -76,6 +81,7 @@ public class SettingContainerConfig<T extends SettingContainer>
                     continue;
                 }
 
+                Shoreline.error("yey");
                 try
                 {
                     setting.fromJson(element.getValue());

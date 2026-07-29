@@ -1,5 +1,6 @@
 package net.shoreline.client.impl.config;
 
+import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.registry.OrderedRegistry;
 import net.shoreline.client.api.registry.RegistryFeature;
 import net.shoreline.client.impl.Managers;
@@ -42,13 +43,17 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
             getRegistry().register(
                     new SettingContainerConfig<>(saveDirectory, "modules", Managers.MODULES.getRegistry()),
                     new BindConfig(saveDirectory));
-
-            loadAll();
         }
         catch (IOException e)
         {
             Loader.error("Failed to create client configurations", e);
         }
+    }
+
+    @Subscribe(priority = Integer.MIN_VALUE)
+    public void onLoaded(ClientEvent.Loaded event)
+    {
+        loadAll();
     }
 
     @Subscribe
@@ -63,6 +68,7 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
         {
             try
             {
+                Shoreline.info("loadin!");
                 config.loadFile();
             }
             catch (IOException e)

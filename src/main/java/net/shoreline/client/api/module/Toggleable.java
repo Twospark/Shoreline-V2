@@ -11,6 +11,7 @@ public class Toggleable extends Module
     private final Setting<Boolean> enabled = new BooleanSetting.Builder("Enabled")
             .setDescription("If the module is enabled or not.")
             .setNameAliases("Toggled")
+            .setVisible(() -> false)
             .setDefaultValue(false).build();
     private final Setting<Bind> bind = new BindSetting.Builder("Bind")
             .setDescription("The module keybind")
@@ -29,6 +30,7 @@ public class Toggleable extends Module
     public Toggleable(String name, String[] nameAliases, String description, Category category)
     {
         super(name, nameAliases, description, category);
+        register(enabled, bind, notify);
         enabled.addObserver(value ->
         {
             if (value)
@@ -42,8 +44,6 @@ public class Toggleable extends Module
                 onDisable();
             }
         });
-
-        reflectSettings();
     }
 
     public boolean isEnabled()

@@ -3,6 +3,11 @@ package net.shoreline.client.api.registry;
 import lombok.Getter;
 import net.shoreline.client.api.common.Feature;
 
+/**
+ * A convenience Feature that contains a {@link Registry}.
+ *
+ * @param <T> the type that the registry contains.
+ */
 @Getter
 public class RegistryFeature<T> extends Feature
 {

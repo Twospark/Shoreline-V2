@@ -29,4 +29,23 @@ public class ShorelineMod implements ClientModInitializer
     {
         return FabricLoader.getInstance().getModContainer("baritone").isPresent();
     }
+
+    public static String getSimpleVersion()
+    {
+        String[] split = MOD_VER.split("\\.");
+        if (split.length == 1)
+        {
+            return MOD_VER;
+        }
+
+        for (int i = 1; i < split.length; i++)
+        {
+            if (!split[i].equals("0"))
+            {
+                return MOD_VER;
+            }
+        }
+
+        return split[0];
+    }
 }

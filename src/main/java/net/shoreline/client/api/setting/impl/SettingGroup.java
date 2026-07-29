@@ -3,6 +3,8 @@ package net.shoreline.client.api.setting.impl;
 import com.google.gson.JsonElement;
 import lombok.Getter;
 import lombok.Setter;
+import net.shoreline.client.api.gui.api.GuiComponent;
+import net.shoreline.client.api.gui.component.ParentComponent;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
 
@@ -43,6 +45,24 @@ public class SettingGroup extends Setting<Void> implements Iterable<Setting<?>>
     public boolean isTransient()
     {
         return true;
+    }
+
+    @Override
+    public GuiComponent getComponent()
+    {
+        ParentComponent component = new ParentComponent(getName(), getVisible());
+        for (Setting<?> setting : settings.values())
+        {
+            GuiComponent sComponent = setting.getComponent();
+            if (sComponent == null)
+            {
+                continue;
+            }
+
+            component.getComponents().add(sComponent);
+        }
+
+        return component;
     }
 
     public static class Builder extends SettingBuilder<Void>

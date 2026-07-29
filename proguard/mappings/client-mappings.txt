@@ -2752,7 +2752,7 @@ net.shoreline.client.impl.module.client.RotationsModule -> net.shoreline.client.
     net.shoreline.client.api.config.AbstractConfig gcdFixConfig -> ki
     net.shoreline.client.api.config.AbstractConfig tickSyncConfig -> kj
     net.shoreline.client.api.config.AbstractConfig lookSyncConfig -> kk
-    net.shoreline.client.impl.rotation.Rotation clientRotations -> kl
+    net.shoreline.client.impl.rotation.util.Rotation clientRotations -> kl
     18:59:void <init>() -> <init>
     64:68:void onRotationUpdatePre(net.shoreline.client.impl.event.network.RotationUpdateEvent$Pre) -> a
     73:77:void onRotationUpdatePre(net.shoreline.client.impl.event.network.RotationUpdateEvent$PrePacket) -> a
@@ -2766,7 +2766,7 @@ net.shoreline.client.impl.module.client.RotationsModule -> net.shoreline.client.
     43:43:net.shoreline.client.api.config.AbstractConfig getGcdFixConfig() -> hv
     46:46:net.shoreline.client.api.config.AbstractConfig getTickSyncConfig() -> hw
     49:49:net.shoreline.client.api.config.AbstractConfig getLookSyncConfig() -> hx
-    53:53:net.shoreline.client.impl.rotation.Rotation getClientRotations() -> hy
+    53:53:net.shoreline.client.impl.rotation.util.Rotation getClientRotations() -> hy
     41:41:java.lang.Boolean lambda$new$1() -> bc
     34:34:java.lang.Boolean lambda$new$0() -> bd
 net.shoreline.client.impl.module.client.RotationsModule$MoveFix -> net.shoreline.client.gB:
@@ -2953,7 +2953,7 @@ net.shoreline.client.impl.module.combat.AutoCrystalModule -> net.shoreline.clien
     260:265:java.lang.String getModuleData() -> aT
     271:286:void onTick(net.shoreline.client.impl.event.TickEvent$Pre) -> a
     291:298:void onTickPost(net.shoreline.client.impl.event.TickEvent$Post) -> a
-    303:343:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    303:343:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     348:382:void onEntitySpawn(net.shoreline.client.impl.event.network.EntitySpawnEvent) -> a
     387:483:void onPacketInbound(net.shoreline.client.impl.event.network.PacketEvent$Inbound) -> a
     488:527:void onRenderWorld(net.shoreline.client.impl.event.render.RenderWorldEvent$Post) -> a
@@ -3065,7 +3065,7 @@ net.shoreline.client.impl.module.combat.AutoDisconnectModule -> net.shoreline.cl
 net.shoreline.client.impl.module.combat.AutoMaceModule -> net.shoreline.client.gN:
     net.shoreline.client.api.config.AbstractConfig maceRange -> mv
     16:24:void <init>() -> <init>
-    29:34:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    29:34:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     39:39:java.lang.String getModuleData() -> aT
 net.shoreline.client.impl.module.combat.AutoMineModule -> net.shoreline.client.gO:
     net.shoreline.client.impl.module.combat.AutoMineModule INSTANCE -> mw
@@ -3143,7 +3143,7 @@ net.shoreline.client.impl.module.combat.AutoXPModule -> net.shoreline.client.gS:
     net.shoreline.client.api.config.AbstractConfig rotateConfig -> lP
     23:40:void <init>() -> <init>
     45:45:java.lang.String getModuleData() -> aT
-    51:111:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    51:111:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     115:123:boolean isPlayerFullDurability() -> jn
 net.shoreline.client.impl.module.combat.AutoXPModule$1 -> net.shoreline.client.gT:
     int[] $SwitchMap$net$shoreline$client$impl$rotation$RotateMode -> mY
@@ -3232,7 +3232,7 @@ net.shoreline.client.impl.module.combat.KillAuraModule -> net.shoreline.client.h
     46:108:void <init>() -> <init>
     113:115:void onDisable() -> aR
     120:121:void onWorldDisconnect(net.shoreline.client.impl.event.WorldEvent$Disconnect) -> b
-    126:172:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    126:172:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     177:194:void onRenderWorld(net.shoreline.client.impl.event.render.RenderWorldEvent$Post) -> a
     198:234:void runAttack(net.minecraft.class_1297,net.shoreline.client.impl.inventory.ItemSlot) -> a
     238:251:void attackEntity(net.minecraft.class_1297) -> f
@@ -3507,7 +3507,7 @@ net.shoreline.client.impl.module.combat.util.MovementExtrapolation -> net.shorel
     15:15:void <init>() -> <init>
 net.shoreline.client.impl.module.combat.util.PearlExtrapolation -> net.shoreline.client.hy:
     net.minecraft.class_4048 PEARL_DIMENSIONS -> oP
-    26:77:java.util.concurrent.CopyOnWriteArrayList extrapolateCollisions(net.minecraft.class_1297,net.shoreline.client.impl.rotation.Rotation,int) -> a
+    26:77:java.util.concurrent.CopyOnWriteArrayList extrapolateCollisions(net.minecraft.class_1297,net.shoreline.client.impl.rotation.util.Rotation,int) -> a
     20:20:void <init>() -> <init>
     49:49:boolean lambda$extrapolateCollisions$0(net.minecraft.class_1297,net.minecraft.class_1297) -> a
     22:22:void <clinit>() -> <clinit>
@@ -3592,7 +3592,7 @@ net.shoreline.client.impl.module.exploit.PhaseModule -> net.shoreline.client.hH:
     36:48:void <init>() -> <init>
     53:85:void onEnable() -> aQ
     90:91:void onDisable() -> aR
-    96:181:void onTick(net.shoreline.client.impl.rotation.ClientRotationEvent) -> b
+    96:181:void onTick(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> b
     185:197:int getBlockSector(net.minecraft.class_243) -> g
     202:218:net.minecraft.class_243 getEdge(net.minecraft.class_243,int) -> a
     224:233:net.minecraft.class_2338 getOffsetPos(net.minecraft.class_2338,int) -> a
@@ -3992,11 +3992,11 @@ net.shoreline.client.impl.module.misc.AntiAimModule -> net.shoreline.client.ix:
     net.shoreline.client.api.config.AbstractConfig yawAngleConfig -> qX
     net.shoreline.client.api.config.AbstractConfig pitchAngleConfig -> qY
     net.shoreline.client.api.config.AbstractConfig jitterTicksConfig -> qZ
-    net.shoreline.client.impl.rotation.Rotation current -> ra
-    net.shoreline.client.impl.rotation.Rotation playerRotation -> rb
+    net.shoreline.client.impl.rotation.util.Rotation current -> ra
+    net.shoreline.client.impl.rotation.util.Rotation playerRotation -> rb
     14:45:void <init>() -> <init>
     50:55:void onEnable() -> aQ
-    60:73:void onRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> c
+    60:73:void onRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> c
     77:96:float getYaw() -> dB
     102:124:float getPitch() -> es
     37:37:java.lang.Boolean lambda$new$3() -> ji
@@ -4164,7 +4164,7 @@ net.shoreline.client.impl.module.misc.FakePlayerModule -> net.shoreline.client.i
     81:93:void onTick(net.shoreline.client.impl.event.TickEvent$Pre) -> a
     98:114:void onPacketOutbound(net.shoreline.client.impl.event.network.PacketEvent$Outbound) -> a
     119:128:void onPacketInbound(net.shoreline.client.impl.event.network.PacketEvent$Inbound) -> a
-    133:168:void onPosition(net.shoreline.client.impl.rotation.ClientRotationEvent) -> d
+    133:168:void onPosition(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> d
     172:182:void snapPosition() -> lw
 net.shoreline.client.impl.module.misc.FakePlayerModule$PositionShot -> net.shoreline.client.iL:
     double x -> sr
@@ -4299,7 +4299,7 @@ net.shoreline.client.impl.module.movement.ElytraFlyModule -> net.shoreline.clien
     float cameraPitch -> tJ
     24:40:void <init>() -> <init>
     45:54:void onMouse(net.shoreline.client.impl.event.MouseEvent) -> a
-    59:70:void onRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> c
+    59:70:void onRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> c
     75:80:void onCameraRotation(net.shoreline.client.impl.event.render.CameraEvent$Rotation) -> a
     85:153:void onTravel_Pre(net.shoreline.client.impl.event.entity.player.TravelEvent$Pre) -> b
     157:162:boolean canSprint() -> lG
@@ -4500,7 +4500,7 @@ net.shoreline.client.impl.module.movement.SprintModule -> net.shoreline.client.j
     22:38:void <init>() -> <init>
     43:43:java.lang.String getModuleData() -> aT
     49:82:void onTickPre(net.shoreline.client.impl.event.TickEvent$Post) -> c
-    87:100:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    87:100:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     105:109:void onStopSprinting(net.shoreline.client.impl.event.network.StopSprintingEvent) -> a
     114:132:void onJumpYaw(net.shoreline.client.impl.event.entity.PlayerJumpEvent$Yaw) -> a
     136:145:boolean canSprint() -> lG
@@ -4740,7 +4740,7 @@ net.shoreline.client.impl.module.render.FreecamModule -> net.shoreline.client.jL
     118:123:void onEntityCameraPosition(net.shoreline.client.impl.event.entity.PlayerVecEvent$Camera) -> a
     128:133:void onEntityRotation(net.shoreline.client.impl.event.entity.PlayerVecEvent$Rotation) -> a
     138:139:void onRenderPlayerThirdPerson(net.shoreline.client.impl.event.render.RenderPlayerThirdPersonEvent) -> a
-    144:162:void onClientRotation(net.shoreline.client.impl.rotation.ClientRotationEvent) -> a
+    144:162:void onClientRotation(net.shoreline.client.impl.rotation.util.ClientRotationEvent) -> a
     167:168:void onRenderHeldItem(net.shoreline.client.impl.event.render.item.RenderHeldItemEvent$Pre) -> a
     175:181:float getMovementMultiplier(boolean,boolean) -> a
     190:199:net.minecraft.class_241 handleVanillaMotion(float,float,float) -> b
@@ -5857,47 +5857,47 @@ net.shoreline.client.impl.render.util.ClientDual -> net.shoreline.client.lV:
     42:44:net.minecraft.class_4588 method_22921(int,int) -> method_22921
     48:50:net.minecraft.class_4588 method_22914(float,float,float) -> method_22914
     55:57:void method_23919(float,float,float,int,float,float,int,int,float,float,float) -> method_23919
-net.shoreline.client.impl.rotation.ClientRotationEvent -> net.shoreline.client.lW:
-    net.shoreline.client.impl.rotation.Rotation rotation -> Cx
-    16:18:void <init>(net.shoreline.client.impl.rotation.Rotation) -> <init>
+net.shoreline.client.impl.rotation.util.ClientRotationEvent -> net.shoreline.client.lW:
+    net.shoreline.client.impl.rotation.util.Rotation rotation -> Cx
+    16:18:void <init>(net.shoreline.client.impl.rotation.util.Rotation) -> <init>
     22:23:void setYaw(float) -> r
     27:28:void setPitch(float) -> x
-    11:11:net.shoreline.client.impl.rotation.Rotation getRotation() -> oK
-    12:12:void setRotation(net.shoreline.client.impl.rotation.Rotation) -> a
+    11:11:net.shoreline.client.impl.rotation.util.Rotation getRotation() -> oK
+    12:12:void setRotation(net.shoreline.client.impl.rotation.util.Rotation) -> a
 net.shoreline.client.impl.rotation.MovementCorrection -> net.shoreline.client.lX:
     net.shoreline.client.impl.module.client.RotationsModule rotationConfig -> Cy
     8:10:void <init>() -> <init>
     14:26:net.minecraft.class_241 correctMovement(float,float,float) -> d
-net.shoreline.client.impl.rotation.RotateMode -> net.shoreline.client.lY:
-    net.shoreline.client.impl.rotation.RotateMode NORMAL -> Cz
-    net.shoreline.client.impl.rotation.RotateMode SILENT -> CA
-    net.shoreline.client.impl.rotation.RotateMode OFF -> CB
-    net.shoreline.client.impl.rotation.RotateMode[] $VALUES -> CC
-    3:3:net.shoreline.client.impl.rotation.RotateMode[] values() -> values
-    3:3:net.shoreline.client.impl.rotation.RotateMode valueOf(java.lang.String) -> valueOf
+net.shoreline.client.impl.rotation.util.RotateMode -> net.shoreline.client.lY:
+    net.shoreline.client.impl.rotation.util.RotateMode NORMAL -> Cz
+    net.shoreline.client.impl.rotation.util.RotateMode SILENT -> CA
+    net.shoreline.client.impl.rotation.util.RotateMode OFF -> CB
+    net.shoreline.client.impl.rotation.util.RotateMode[] $VALUES -> CC
+    3:3:net.shoreline.client.impl.rotation.util.RotateMode[] values() -> values
+    3:3:net.shoreline.client.impl.rotation.util.RotateMode valueOf(java.lang.String) -> valueOf
     3:3:void <init>(java.lang.String,int) -> <init>
-    3:3:net.shoreline.client.impl.rotation.RotateMode[] $values() -> oL
+    3:3:net.shoreline.client.impl.rotation.util.RotateMode[] $values() -> oL
     3:5:void <clinit>() -> <clinit>
-net.shoreline.client.impl.rotation.Rotation -> net.shoreline.client.lZ:
+net.shoreline.client.impl.rotation.util.Rotation -> net.shoreline.client.lZ:
     float yaw -> fz
     float pitch -> gM
     21:24:void <init>(float,float) -> <init>
     28:29:void <init>(net.minecraft.class_1297) -> <init>
-    33:33:net.shoreline.client.impl.rotation.Rotation add(net.shoreline.client.impl.rotation.Rotation) -> b
-    38:38:net.shoreline.client.impl.rotation.Rotation subtract(net.shoreline.client.impl.rotation.Rotation) -> c
-    43:43:net.shoreline.client.impl.rotation.Rotation multiply(float) -> Z
+    33:33:net.shoreline.client.impl.rotation.util.Rotation add(net.shoreline.client.impl.rotation.util.Rotation) -> b
+    38:38:net.shoreline.client.impl.rotation.util.Rotation subtract(net.shoreline.client.impl.rotation.util.Rotation) -> c
+    43:43:net.shoreline.client.impl.rotation.util.Rotation multiply(float) -> Z
     48:50:void apply(net.minecraft.class_1297) -> u
     54:55:void applyToPlayer() -> oM
     59:59:float[] getComponents() -> oN
-    66:71:net.shoreline.client.impl.rotation.Rotation calculateNewRotation(net.shoreline.client.impl.rotation.Rotation,double,double) -> a
-    76:85:java.util.List approximateCursorDeltas(net.shoreline.client.impl.rotation.Rotation) -> d
-    90:95:net.shoreline.client.impl.rotation.Rotation correctSensitivity(net.shoreline.client.impl.rotation.Rotation) -> e
-    100:101:net.shoreline.client.impl.rotation.Rotation smoothedTurn(net.shoreline.client.impl.rotation.Rotation,double) -> a
-    106:107:float fov(net.shoreline.client.impl.rotation.Rotation) -> f
-    112:114:net.shoreline.client.impl.rotation.Rotation closestDelta(net.shoreline.client.impl.rotation.Rotation) -> g
+    66:71:net.shoreline.client.impl.rotation.util.Rotation calculateNewRotation(net.shoreline.client.impl.rotation.util.Rotation,double,double) -> a
+    76:85:java.util.List approximateCursorDeltas(net.shoreline.client.impl.rotation.util.Rotation) -> d
+    90:95:net.shoreline.client.impl.rotation.util.Rotation correctSensitivity(net.shoreline.client.impl.rotation.util.Rotation) -> e
+    100:101:net.shoreline.client.impl.rotation.util.Rotation smoothedTurn(net.shoreline.client.impl.rotation.util.Rotation,double) -> a
+    106:107:float fov(net.shoreline.client.impl.rotation.util.Rotation) -> f
+    112:114:net.shoreline.client.impl.rotation.util.Rotation closestDelta(net.shoreline.client.impl.rotation.util.Rotation) -> g
     119:124:net.minecraft.class_243 toForwardVector() -> oO
-    130:130:net.shoreline.client.impl.rotation.Rotation withYaw(float) -> aa
-    135:135:net.shoreline.client.impl.rotation.Rotation withPitch(float) -> ab
+    130:130:net.shoreline.client.impl.rotation.util.Rotation withYaw(float) -> aa
+    135:135:net.shoreline.client.impl.rotation.util.Rotation withPitch(float) -> ab
     141:150:boolean equals(java.lang.Object) -> equals
     155:158:double getGcd() -> oP
     18:18:float getYaw() -> dB
@@ -5905,19 +5905,19 @@ net.shoreline.client.impl.rotation.Rotation -> net.shoreline.client.lZ:
     15:15:void setYaw(float) -> r
     15:15:void setPitch(float) -> x
 net.shoreline.client.impl.rotation.RotationHandler -> net.shoreline.client.ma:
-    net.shoreline.client.impl.rotation.Rotation cachedRotation -> CD
+    net.shoreline.client.impl.rotation.util.Rotation cachedRotation -> CD
     7:7:void <init>() -> <init>
     14:17:void applyRotations(net.minecraft.class_746) -> a
     21:28:void revertRotations(net.minecraft.class_746) -> b
-    32:38:void resetRotations(net.shoreline.client.impl.rotation.Rotation,float) -> a
-    9:9:net.shoreline.client.impl.rotation.Rotation getCachedRotation() -> oQ
+    32:38:void resetRotations(net.shoreline.client.impl.rotation.util.Rotation,float) -> a
+    9:9:net.shoreline.client.impl.rotation.util.Rotation getCachedRotation() -> oQ
 net.shoreline.client.impl.rotation.RotationManager -> net.shoreline.client.mb:
     net.shoreline.client.impl.module.client.RotationsModule rotationsConfig -> CE
-    net.shoreline.client.impl.rotation.Rotation clientRotation -> CF
+    net.shoreline.client.impl.rotation.util.Rotation clientRotation -> CF
     net.shoreline.client.impl.rotation.RotationHandler handler -> CG
     net.shoreline.client.impl.rotation.MovementCorrection moveFix -> CH
-    net.shoreline.client.impl.rotation.Rotation serverRotation -> CI
-    net.shoreline.client.impl.rotation.Rotation preJumpRotation -> CJ
+    net.shoreline.client.impl.rotation.util.Rotation serverRotation -> CI
+    net.shoreline.client.impl.rotation.util.Rotation preJumpRotation -> CJ
     net.shoreline.client.impl.render.animation.Smoother yawAnim -> CK
     net.shoreline.client.impl.render.animation.Smoother pitchAnim -> CL
     java.util.List PROJECTILE_ITEMS -> CM
@@ -5938,7 +5938,7 @@ net.shoreline.client.impl.rotation.RotationManager -> net.shoreline.client.mb:
     238:242:void onTravelPre(net.shoreline.client.impl.event.entity.player.TravelEvent$Pre) -> c
     247:251:void onTravelPost(net.shoreline.client.impl.event.entity.player.TravelEvent$Post) -> a
     256:267:void onPlayerTransforms(net.shoreline.client.impl.event.render.entity.PlayerTransformsEvent) -> a
-    275:289:void setSilentRotation(net.shoreline.client.impl.rotation.Rotation) -> h
+    275:289:void setSilentRotation(net.shoreline.client.impl.rotation.util.Rotation) -> h
     293:295:void resetSilentRotation() -> oR
     299:300:boolean isFacingYaw(float) -> ac
     305:306:boolean isFacingPitch(float) -> ad
@@ -5946,15 +5946,15 @@ net.shoreline.client.impl.rotation.RotationManager -> net.shoreline.client.mb:
     316:317:void clearClientRotation() -> oS
     321:321:boolean hasClientRotation() -> oT
     29:29:net.shoreline.client.impl.module.client.RotationsModule getRotationsConfig() -> oU
-    31:31:net.shoreline.client.impl.rotation.Rotation getClientRotation() -> oV
+    31:31:net.shoreline.client.impl.rotation.util.Rotation getClientRotation() -> oV
     33:33:net.shoreline.client.impl.rotation.RotationHandler getHandler() -> oW
     34:34:net.shoreline.client.impl.rotation.MovementCorrection getMoveFix() -> oX
-    35:35:net.shoreline.client.impl.rotation.Rotation getServerRotation() -> oY
-    37:37:net.shoreline.client.impl.rotation.Rotation getPreJumpRotation() -> oZ
+    35:35:net.shoreline.client.impl.rotation.util.Rotation getServerRotation() -> oY
+    37:37:net.shoreline.client.impl.rotation.util.Rotation getPreJumpRotation() -> oZ
     39:39:net.shoreline.client.impl.render.animation.Smoother getYawAnim() -> pa
     40:40:net.shoreline.client.impl.render.animation.Smoother getPitchAnim() -> pb
-    26:26:void setClientRotation(net.shoreline.client.impl.rotation.Rotation) -> i
-    26:26:void setPreJumpRotation(net.shoreline.client.impl.rotation.Rotation) -> j
+    26:26:void setClientRotation(net.shoreline.client.impl.rotation.util.Rotation) -> i
+    26:26:void setPreJumpRotation(net.shoreline.client.impl.rotation.util.Rotation) -> j
     156:156:void <clinit>() -> <clinit>
 net.shoreline.client.impl.rotation.RotationUtil -> net.shoreline.client.mc:
     13:24:float[] getRotationsTo(net.minecraft.class_243,net.minecraft.class_243) -> a

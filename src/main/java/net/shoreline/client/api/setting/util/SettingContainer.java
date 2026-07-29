@@ -20,7 +20,7 @@ public class SettingContainer extends NetworkHandler
 
     public void reflectSettings()
     {
-        for (Field field : getClass().getFields())
+        for (Field field : getClass().getDeclaredFields())
         {
             if (Setting.class.isAssignableFrom(field.getType()))
             {
@@ -50,7 +50,7 @@ public class SettingContainer extends NetworkHandler
         settings.put(config.getId(), config);
     }
 
-    protected void unregister(Setting<?>... config)
+    protected void register(Setting<?>... config)
     {
         Arrays.stream(config).forEach(this::register);
     }
@@ -62,7 +62,7 @@ public class SettingContainer extends NetworkHandler
 
     public Setting<?> getSetting(String id)
     {
-        return settings.get(id);
+        return settings.get(id.toLowerCase());
     }
 
     public SequencedCollection<Setting<?>> getSettings()

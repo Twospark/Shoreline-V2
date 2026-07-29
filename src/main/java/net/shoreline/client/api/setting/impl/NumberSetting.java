@@ -3,6 +3,9 @@ package net.shoreline.client.api.setting.impl;
 import com.google.gson.JsonElement;
 import lombok.Getter;
 import lombok.Setter;
+import net.shoreline.client.api.gui.api.GuiComponent;
+import net.shoreline.client.api.gui.component.NumberComponent;
+import net.shoreline.client.api.gui.handler.NumberHandler;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
 
@@ -68,6 +71,20 @@ public class NumberSetting<N extends Number> extends Setting<N>
         }
 
         return (N) result;
+    }
+
+    @Override
+    public GuiComponent getComponent()
+    {
+        NumberHandler<N> handler = new NumberHandler<>(
+                this::getValue,
+                this::setValue,
+                this::getValue,
+                roundingPlaces,
+                min.doubleValue(),
+                max.doubleValue());
+
+        return new NumberComponent(getName(), getVisible(), handler);
     }
 
     public static class Builder<T extends Number> extends SettingBuilder<T>

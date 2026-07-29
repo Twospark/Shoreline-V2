@@ -80,6 +80,16 @@ public class RectBuilder implements GuiElementRenderState
         return this;
     }
 
+    public RectBuilder setGradient(int startColor, int endColor, boolean sideways)
+    {
+        this.color = startColor;
+        this.gradientColor = endColor;
+
+        this.gradientSideways = sideways;
+        this.isGradient = true;
+        return this;
+    }
+
     public RectBuilder setTexture(TextureSetup textureSetup, float u1, float v1, float u2, float v2)
     {
         this.textureSetup = textureSetup;

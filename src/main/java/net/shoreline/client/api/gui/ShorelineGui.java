@@ -8,6 +8,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.shoreline.client.api.gui.api.GuiComponent;
 import net.shoreline.client.api.gui.api.Interactable;
+import net.shoreline.client.api.gui.handler.SearchHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,13 @@ import java.util.List;
 public abstract class ShorelineGui extends Screen
 {
     protected final List<GuiComponent> components = new ArrayList<>();
+    protected final SearchHandler searchHandler = new SearchHandler();
 
     public ShorelineGui(String type)
     {
         super(Component.literal("Shoreline-" + type));
-
         load();
-        alignComponents();
+        align();
     }
 
     public abstract void load();
@@ -30,12 +31,13 @@ public abstract class ShorelineGui extends Screen
     public void resize(int width, int height)
     {
         super.resize(width, height);
-        alignComponents();
+        align();
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
     {
+        searchHandler.render(graphics, partialTicks);
         components.forEach(component -> component.render(graphics, mouseX, mouseY, partialTicks));
     }
 
@@ -101,7 +103,8 @@ public abstract class ShorelineGui extends Screen
             }
         }
 
-        return true;
+        searchHandler.onKey(key, scancode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -116,6 +119,7 @@ public abstract class ShorelineGui extends Screen
             }
         }
 
+        searchHandler.onChar(chr);
         return true;
     }
 
@@ -125,7 +129,7 @@ public abstract class ShorelineGui extends Screen
         return false;
     }
 
-    public void alignComponents()
+    public void align()
     {
         float sW = minecraft.getWindow().getGuiScaledWidth();
         float x = 4.0f;
@@ -141,10 +145,5 @@ public abstract class ShorelineGui extends Screen
                 y = components.getFirst().getHeight() + 4;
             }
         }
-    }
-
-    public Theme getTheme()
-    {
-        return Theme.getInstance();
     }
 }

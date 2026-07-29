@@ -1,5 +1,6 @@
 package net.shoreline.client.impl.network;
 
+import net.minecraft.network.protocol.Packet;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.impl.Managers;
 
@@ -15,5 +16,15 @@ public class NetworkHandler extends Feature
     {
         super(name, nameAliases);
         Managers.NETWORK.registerHandler(this);
+    }
+
+    public void sendPacket(Packet<?> packet)
+    {
+        Managers.NETWORK.send(this, packet);
+    }
+
+    public void sendPacketQuietly(Packet<?> packet)
+    {
+        Managers.NETWORK.sendQuietly(this, packet);
     }
 }

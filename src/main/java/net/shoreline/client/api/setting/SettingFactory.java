@@ -13,16 +13,19 @@ import java.util.function.BiFunction;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class SettingFactory<T>
 {
-    private static final Map<Class<?>, BiFunction<String, String, Setting>> FACTORIES = new HashMap<>();
+    private static final Map<Class<?>, BiFunction<String, String, Setting>>
+            FACTORIES = new HashMap<>();
 
     static
     {
         FACTORIES.put(Boolean.class, BooleanSetting::new);
         FACTORIES.put(Color.class, ColorSetting::new);
         FACTORIES.put(Number.class, NumberSetting::new);
+        FACTORIES.put(Float.class, NumberSetting::new);
+        FACTORIES.put(Integer.class, NumberSetting::new);
+        FACTORIES.put(Double.class, NumberSetting::new);
         FACTORIES.put(Void.class, SettingGroup::new);
         FACTORIES.put(String.class, StringSetting::new);
-        FACTORIES.put(Enum.class, EnumSetting::new);
         FACTORIES.put(Bind.class, BindSetting::new);
     }
 
@@ -30,14 +33,12 @@ public class SettingFactory<T>
 
     public Setting<T> create(final String name, final String description)
     {
-        Setting<T> setting = FACTORIES.get(value.getClass())
-                .apply(name, description);
-
-        if (setting == null)
+        BiFunction<String, String, Setting> factory = FACTORIES.get(value.getClass());
+        if (factory == null)
         {
             throw new IllegalArgumentException("Unsupported config type: " + value.getClass().getName());
         }
 
-        return setting;
+        return (Setting<T>) factory.apply(name, description);
     }
 }

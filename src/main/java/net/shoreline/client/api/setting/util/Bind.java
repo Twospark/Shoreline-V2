@@ -2,6 +2,7 @@ package net.shoreline.client.api.setting.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.shoreline.client.util.input.Keyboard;
 
 @RequiredArgsConstructor
 @Getter
@@ -22,5 +23,11 @@ public class Bind
     public static Bind fromKey(int key)
     {
         return new Bind(key);
+    }
+
+    @Override
+    public String toString()
+    {
+        return Keyboard.toString(key);
     }
 }

@@ -2,6 +2,7 @@ package net.shoreline.client.api.setting.impl;
 
 import com.google.gson.JsonElement;
 import lombok.Setter;
+import net.shoreline.client.api.gui.api.GuiComponent;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
 
@@ -60,6 +61,12 @@ public class StringSetting extends Setting<String>
     public boolean hasRestriction()
     {
         return restriction != -1;
+    }
+
+    @Override
+    public GuiComponent getComponent()
+    {
+        return null;
     }
 
     public static class Builder extends SettingBuilder<String>

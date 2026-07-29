@@ -3,6 +3,7 @@ package net.shoreline.client.asm.mixins.input;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.input.KeyEvent;
 import net.shoreline.client.impl.event.input.KeyboardEvent;
+import net.shoreline.client.util.input.Input;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +22,7 @@ public class MixinKeyboardHandler
             return;
         }
 
+        Input.setKeyState(key, action != 0);
         KeyboardEvent keyboardEvent = new KeyboardEvent(key, action, event.modifiers());
         EventBus.getInstance().post(keyboardEvent);
     }

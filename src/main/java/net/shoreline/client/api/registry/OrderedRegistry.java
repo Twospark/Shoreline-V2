@@ -35,7 +35,7 @@ public class OrderedRegistry<T extends Identifiable> implements Registry<T>
     {
         for (T identifiable : collection)
         {
-            if (identifiable.getId().equals(name))
+            if (identifiable.getId().equals(name.toLowerCase()))
             {
                 return identifiable;
             }

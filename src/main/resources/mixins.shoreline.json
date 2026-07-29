@@ -4,6 +4,9 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "MixinMinecraft",
+    "connection.MixinClientPacketListener",
+    "connection.MixinConnection",
+    "gui.MixinGui",
     "input.MixinKeyboardHandler"
   ],
   "injectors": {

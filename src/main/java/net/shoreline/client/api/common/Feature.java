@@ -61,4 +61,9 @@ public class Feature implements Identifiable, Globals
             mc.execute(runnable);
         }
     }
+
+    protected boolean checkNull()
+    {
+        return mc.player == null || mc.level == null;
+    }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.shoreline.client.api.config.ConfigElement;
+import net.shoreline.client.api.gui.api.Displayable;
 import net.shoreline.client.api.interfaces.Identifiable;
 import net.shoreline.client.api.setting.util.SettingObserver;
 
@@ -12,7 +13,8 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public abstract class Setting<T> extends SettingObserver<T> implements Identifiable, ConfigElement
+public abstract class Setting<T> extends SettingObserver<T>
+        implements Identifiable, ConfigElement, Displayable
 {
     protected final String name;
     protected final String description;
