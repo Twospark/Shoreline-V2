@@ -51,27 +51,23 @@ public class SettingContainerConfig<T extends SettingContainer>
         Path filepath = getPath();
         if (!Files.exists(filepath))
         {
-            Shoreline.error("er");
             return;
         }
 
         JsonObject object = parseJson(IOUtils.readFile(filepath), JsonObject.class);
         if (object == null)
         {
-            Shoreline.error("bruh");
             return;
         }
 
         for (Map.Entry<String, JsonElement> entry : object.entrySet())
         {
-            Shoreline.info("ee");
             T container = registry.get(entry.getKey());
             if (container == null)
             {
                 continue;
             }
 
-            Shoreline.error("found da mod atleast");
             JsonObject sObject = entry.getValue().getAsJsonObject();
             for (Map.Entry<String, JsonElement> element : sObject.entrySet())
             {
