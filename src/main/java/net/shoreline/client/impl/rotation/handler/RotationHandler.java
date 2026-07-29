@@ -7,7 +7,7 @@ import net.shoreline.client.impl.rotation.util.Rotation;
 
 public class RotationHandler
 {
-    @Getter
+    /* @Getter
     private Rotation cachedRotation;
 
     public void applyRotations(LocalPlayer player)
@@ -36,5 +36,5 @@ public class RotationHandler
         }
 
         Managers.ROTATION.clearClientRotation();
-    }
+    } */
 }
