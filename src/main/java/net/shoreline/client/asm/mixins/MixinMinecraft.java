@@ -1,9 +1,12 @@
 package net.shoreline.client.asm.mixins;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.thread.ShorelineExecutor;
 import net.shoreline.client.impl.event.ClientEvent;
+import net.shoreline.client.impl.event.LevelEvent;
 import net.shoreline.client.impl.event.TickEvent;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +28,20 @@ public abstract class MixinMinecraft
     private void tickHook_Tail(CallbackInfo info)
     {
         TickEvent.Post event = new TickEvent.Post();
+        EventBus.getInstance().post(event);
+    }
+
+    @Inject(method = "setLevel", at = @At(value = "TAIL"))
+    private void setLevelHook(ClientLevel level, CallbackInfo info)
+    {
+        LevelEvent.Join event = new LevelEvent.Join();
+        EventBus.getInstance().post(event);
+    }
+
+    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;Z)V", at = @At(value = "TAIL"))
+    private void disconnectHook(Screen screen, boolean keepResourcePacks, CallbackInfo info)
+    {
+        LevelEvent.Disconnect event = new LevelEvent.Disconnect();
         EventBus.getInstance().post(event);
     }
 

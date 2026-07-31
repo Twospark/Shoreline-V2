@@ -68,7 +68,6 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
         {
             try
             {
-                Shoreline.info("loadin!");
                 config.loadFile();
             }
             catch (IOException e)

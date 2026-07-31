@@ -1,1 +1,4 @@
 accessWidener v2 official
+
+# Input
+accessible field net/minecraft/client/player/ClientInput moveVector Lnet/minecraft/world/phys/Vec2;

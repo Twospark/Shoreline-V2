@@ -38,7 +38,7 @@ public class Module extends SettingContainer implements Displayable
         for (Setting<?> setting : getSettings())
         {
             GuiComponent sComponent = setting.getComponent();
-            if (sComponent == null)
+            if (sComponent == null || setting.isGrouped())
             {
                 continue;
             }

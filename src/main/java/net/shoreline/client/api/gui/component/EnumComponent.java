@@ -28,7 +28,9 @@ public class EnumComponent<E extends Enum<E>> extends ParentComponent
         scissorText(graphics, Formatter.formatEnum(setting.getValue()));
         drawSettingText(graphics, this, getLabel(), false, false);
         graphics.disableScissor();
-        drawAnimatedRightText(graphics, setting.getValue().name().replace("_", ""), false, partialTicks);
+
+        String formatted = Formatter.formatEnum(setting.getValue());
+        drawAnimatedRightText(graphics, Formatter.capitalize(formatted.toLowerCase()), false, partialTicks);
 
         if (animation.getFactor() > 0.001)
         {
@@ -73,7 +75,7 @@ public class EnumComponent<E extends Enum<E>> extends ParentComponent
 
         public EnumValueComponent(E e)
         {
-            super(e.name(), () -> true, () -> setting.setValue(e));
+            super(Formatter.capitalize(Formatter.formatEnum(e).toLowerCase()), () -> true, () -> setting.setValue(e));
             this.e = e;
             this.colorAnimation = new ColorAnimation(150, Easing.LINEAR);
         }

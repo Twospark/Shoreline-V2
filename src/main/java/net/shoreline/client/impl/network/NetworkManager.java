@@ -1,11 +1,8 @@
 package net.shoreline.client.impl.network;
 
-import net.fabricmc.fabric.impl.attachment.sync.clientbound.ClientboundAttachmentSyncPayload;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.asm.ducks.connection.IClientPacketListener;
 import net.shoreline.client.impl.event.connection.PacketEvent;

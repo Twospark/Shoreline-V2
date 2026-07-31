@@ -1,5 +1,6 @@
 package net.shoreline.client.impl.modules.client;
 
+import lombok.Getter;
 import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.module.Concurrent;
 import net.shoreline.client.api.setting.Setting;
@@ -7,8 +8,11 @@ import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.impl.EnumSetting;
 import net.shoreline.client.impl.rotation.util.Rotation;
 
+@Getter
 public class RotationsModule extends Concurrent
 {
+    public static RotationsModule INSTANCE;
+
     Setting<Boolean> showRotations = new BooleanSetting.Builder("ShowRotations")
             .setDescription("Renders the serverside rotations")
             .setDefaultValue(true).build();
@@ -51,6 +55,7 @@ public class RotationsModule extends Concurrent
     public RotationsModule()
     {
         super("Rotations", "Manages Shorelines internal RotationManager", Category.CLIENT);
+        INSTANCE = this;
     }
 
     public enum MoveFix

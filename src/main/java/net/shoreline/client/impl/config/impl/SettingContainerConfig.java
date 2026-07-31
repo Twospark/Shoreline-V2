@@ -77,7 +77,6 @@ public class SettingContainerConfig<T extends SettingContainer>
                     continue;
                 }
 
-                Shoreline.error("yey");
                 try
                 {
                     setting.fromJson(element.getValue());

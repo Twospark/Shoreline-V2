@@ -57,7 +57,7 @@ public abstract class SettingBuilder<T>
         return buildInternal(factory.create(name, description));
     }
 
-    public Setting<T> buildInternal(Setting<T> setting)
+    protected Setting<T> buildInternal(Setting<T> setting)
     {
         if (factory == null)
         {

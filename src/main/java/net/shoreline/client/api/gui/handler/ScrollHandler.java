@@ -13,6 +13,7 @@ public class ScrollHandler implements Globals
 {
     private final WindowComponent component;
     private final Smoother smoother = new Smoother();
+    private final Smoother overscroll = new Smoother();
     private final float padding;
     private float scroll;
     private float currentScroll;

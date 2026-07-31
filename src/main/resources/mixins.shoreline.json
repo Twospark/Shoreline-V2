@@ -6,8 +6,14 @@
     "MixinMinecraft",
     "connection.MixinClientPacketListener",
     "connection.MixinConnection",
+    "connection.MixinLocalPlayer",
+    "connection.MixinMultiPlayerGameMode",
+    "entity.player.MixinInventory",
+    "entity.player.MixinPlayer",
     "gui.MixinGui",
-    "input.MixinKeyboardHandler"
+    "input.MixinClientInput",
+    "input.MixinKeyboardHandler",
+    "input.MixinKeyboardInput"
   ],
   "injectors": {
     "defaultRequire": 1

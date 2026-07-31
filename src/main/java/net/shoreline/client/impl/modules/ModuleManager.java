@@ -9,6 +9,7 @@ import net.shoreline.client.api.registry.RegistryFeature;
 import net.shoreline.client.api.setting.util.SettingContainer;
 import net.shoreline.client.impl.event.input.KeyboardEvent;
 import net.shoreline.client.impl.modules.client.*;
+import net.shoreline.client.impl.modules.combat.AuraModule;
 import net.shoreline.client.impl.modules.hud.WatermarkElement;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
@@ -30,9 +31,13 @@ public class ModuleManager extends RegistryFeature<Module>
         register(
                 new ClickGuiModule(),
                 new HudModule(),
+                new InventoryModule(),
                 new LatencyModule(),
+                new RotationsModule(),
                 new SocialsModule(),
                 new ThemeModule(),
+
+                new AuraModule(),
 
                 new WatermarkElement()
         );

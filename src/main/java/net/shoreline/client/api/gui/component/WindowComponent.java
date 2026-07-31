@@ -169,6 +169,12 @@ public class WindowComponent extends ParentComponent
         return super.checkComponent(component);
     }
 
+    @Override
+    public void scissor(GuiGraphicsExtractor graphics)
+    {
+        graphics.enableScissor((int) (getX() - 0.5f), (int) (getY() + getFeatureHeight() + 0.5f), (int) (getX() + getWidth() + 0.5f), (int) (getY() + getMaxHeight() + 0.5f));
+    }
+
     public boolean isOpen()
     {
         return animation.getFactor() > 0.001;

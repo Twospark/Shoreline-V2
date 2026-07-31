@@ -84,7 +84,7 @@ public class NumberSetting<N extends Number> extends Setting<N>
                 min.doubleValue(),
                 max.doubleValue());
 
-        return new NumberComponent(getName(), getVisible(), handler);
+        return new NumberComponent(getName(), getVisible(), handler, format == null ? "" : format);
     }
 
     public static class Builder<T extends Number> extends SettingBuilder<T>

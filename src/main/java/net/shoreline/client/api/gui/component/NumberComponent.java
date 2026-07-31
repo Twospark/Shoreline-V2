@@ -4,10 +4,12 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.shoreline.client.api.gui.api.Interactable;
 import net.shoreline.client.api.gui.handler.NumberHandler;
 import net.shoreline.client.api.gui.handler.TextHandler;
+import net.shoreline.client.impl.render.ColorUtil;
 import net.shoreline.client.impl.render.Render2DUtil;
 import net.shoreline.client.impl.render.animation.Smoother;
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.*;
 import java.util.function.Supplier;
 
 public class NumberComponent extends AbstractComponent implements Interactable
@@ -17,6 +19,7 @@ public class NumberComponent extends AbstractComponent implements Interactable
     private final NumberHandler numberHandler;
     private boolean dragging;
     private boolean listening;
+    private String format = "";
 
     public NumberComponent(NumberHandler handler)
     {
@@ -29,11 +32,21 @@ public class NumberComponent extends AbstractComponent implements Interactable
         this.numberHandler = handler;
     }
 
+    public NumberComponent(String label, Supplier<Boolean> visibility, NumberHandler handler, String format)
+    {
+        super(label, visibility);
+        this.numberHandler = handler;
+    }
+
     public void drawSlider(GuiGraphicsExtractor graphics, String text, float fill, float partialTicks)
     {
+        double hFactor = hoverAnimation.getFactor();
+        Color clr = getTheme().getPrimaryC(0.5f);
+        Color color = ColorUtil.interpolate(clr, clr.brighter(), hFactor);
+
         float sliderWidth = getWidth() * fill;
-        Render2DUtil.drawRect(graphics, getX(), getY() + 1.5f, getX() + sliderWidth, getY() + getFeatureHeight() - 0.5f, getTheme().getPrimary(0.5f));
-        drawHoverRect(graphics);
+        Render2DUtil.drawRect(graphics, getX(), getY() + 1.5f, getX() + sliderWidth, getY() + getFeatureHeight(), getTheme().getColor(color.getRGB(), 0.5f));
+        Render2DUtil.drawRect(graphics, getX() + sliderWidth, getY() + 1.5f, getX() + getWidth(), getY() + getFeatureHeight(), ColorUtil.withTransparency(Color.GRAY, Math.max(50, (int) (75 * hoverAnimation.getFactor()))).getRGB());
         scissorText(graphics, text);
         drawSettingText(graphics, this, getLabel(), false, false);
         graphics.disableScissor();
@@ -45,7 +58,7 @@ public class NumberComponent extends AbstractComponent implements Interactable
     {
         String text = listening
                 ? textHandler.getIdlingText()
-                : numberHandler.getValue().toString();
+                : numberHandler.getValue().toString() + format;
 
         float percent = numberHandler.getPercent();
         float smoother = (float) filter.smooth(percent, 0.5, partialTicks);

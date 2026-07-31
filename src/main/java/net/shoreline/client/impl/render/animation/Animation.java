@@ -16,6 +16,11 @@ public class Animation implements Globals
     private long lastMillis = 0L;
     private boolean state;
 
+    public Animation(boolean state, int length)
+    {
+        this(state, 0, 1, length, Easing.LINEAR);
+    }
+
     public Animation(double speed, Easing easing)
     {
         this(false, 0, 1, speed, easing);

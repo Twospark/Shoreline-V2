@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import lombok.Getter;
 import lombok.Setter;
 import net.shoreline.client.api.gui.api.GuiComponent;
-import net.shoreline.client.api.gui.component.ParentComponent;
+import net.shoreline.client.api.gui.component.ToggleableGroupComponent;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
 
@@ -12,13 +12,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-@Getter
 @Setter
-public class SettingGroup extends Setting<Void> implements Iterable<Setting<?>>
+@Getter
+public class ToggleableSettingGroup extends Setting<Boolean>
+        implements Iterable<Setting<?>>
 {
     private LinkedHashMap<String, Setting<?>> settings;
 
-    public SettingGroup(String name, String description)
+    public ToggleableSettingGroup(String name, String description)
     {
         super(name, description);
     }
@@ -32,25 +33,19 @@ public class SettingGroup extends Setting<Void> implements Iterable<Setting<?>>
     @Override
     public void fromJson(JsonElement element)
     {
-        // NOP
+        setValue(element.getAsBoolean());
     }
 
     @Override
     public JsonElement toJson()
     {
-        return null;
-    }
-
-    @Override
-    public boolean isTransient()
-    {
-        return true;
+        return parse(getValue().toString());
     }
 
     @Override
     public GuiComponent getComponent()
     {
-        ParentComponent component = new ParentComponent(getName(), getVisible());
+        ToggleableGroupComponent component = new ToggleableGroupComponent(this);
         for (Setting<?> setting : settings.values())
         {
             GuiComponent sComponent = setting.getComponent();
@@ -65,7 +60,7 @@ public class SettingGroup extends Setting<Void> implements Iterable<Setting<?>>
         return component;
     }
 
-    public static class Builder extends SettingBuilder<Void>
+    public static class Builder extends SettingBuilder<Boolean>
     {
         private final LinkedHashMap<String, Setting<?>> settings = new LinkedHashMap<>();
 
@@ -86,10 +81,11 @@ public class SettingGroup extends Setting<Void> implements Iterable<Setting<?>>
             return this;
         }
 
-        public SettingGroup build()
+        public ToggleableSettingGroup build()
         {
-            setDefaultValue(null);
-            SettingGroup group = (SettingGroup) super.buildInternal(new SettingGroup(name, description));
+            ToggleableSettingGroup group = (ToggleableSettingGroup)
+                    buildInternal(new ToggleableSettingGroup(name, description));
+
             group.setSettings(settings);
 
             settings.values().forEach(c -> c.setGrouped(true));
