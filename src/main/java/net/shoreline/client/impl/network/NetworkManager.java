@@ -1,10 +1,14 @@
 package net.shoreline.client.impl.network;
 
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.prediction.BlockStatePredictionHandler;
+import net.minecraft.client.multiplayer.prediction.PredictiveAction;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.asm.ducks.connection.IClientPacketListener;
+import net.shoreline.client.asm.ducks.level.IClientLevel;
 import net.shoreline.client.impl.event.connection.PacketEvent;
 import net.shoreline.eventbus.EventBus;
 
@@ -48,6 +52,20 @@ public class NetworkManager extends Feature
         {
             ((IClientPacketListener) packetListener).shoreline$sendQuietPacket(packet);
             logPacket(handler, packet);
+        });
+    }
+
+    public void sendSequenced(PredictiveAction predictiveAction)
+    {
+        applyIfPresent(packetListener ->
+        {
+            BlockStatePredictionHandler handler = ((IClientLevel) mc.level).shoreline$getBlockStatePredictionHandler();
+            try (BlockStatePredictionHandler prediction = handler.startPredicting())
+            {
+                int sequence = prediction.currentSequence();
+                Packet<ServerGamePacketListener> packetConcludingPrediction = predictiveAction.predict(sequence);
+                packetListener.send(packetConcludingPrediction);
+            }
         });
     }
 

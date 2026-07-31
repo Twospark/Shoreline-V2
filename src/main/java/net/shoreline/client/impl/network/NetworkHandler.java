@@ -1,5 +1,6 @@
 package net.shoreline.client.impl.network;
 
+import net.minecraft.client.multiplayer.prediction.PredictiveAction;
 import net.minecraft.network.protocol.Packet;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.impl.Managers;
@@ -26,5 +27,10 @@ public class NetworkHandler extends Feature
     public void sendPacketQuietly(Packet<?> packet)
     {
         Managers.NETWORK.sendQuietly(this, packet);
+    }
+
+    public void sendSequencedPacket(PredictiveAction predictiveAction)
+    {
+        Managers.NETWORK.sendSequenced(predictiveAction);
     }
 }

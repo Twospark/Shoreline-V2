@@ -13,7 +13,8 @@
     "gui.MixinGui",
     "input.MixinClientInput",
     "input.MixinKeyboardHandler",
-    "input.MixinKeyboardInput"
+    "input.MixinKeyboardInput",
+    "level.MixinClientLevel"
   ],
   "injectors": {
     "defaultRequire": 1

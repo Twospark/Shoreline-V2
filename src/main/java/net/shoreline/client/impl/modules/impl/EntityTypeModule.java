@@ -17,7 +17,7 @@ public class EntityTypeModule extends Toggleable
             .setDescription("Target Players").setDefaultValue(true).build();
     public Setting<Boolean> targetHostiles = new BooleanSetting.Builder("Hostiles")
             .setDescription("Target Hostiles").setDefaultValue(true).build();
-    public Setting<Boolean> targetPassives = new BooleanSetting.Builder("Players")
+    public Setting<Boolean> targetPassives = new BooleanSetting.Builder("Passives")
             .setDescription("Target Passives").setDefaultValue(false).build();
 
     public EntityTypeModule(String name, String description, Category category)

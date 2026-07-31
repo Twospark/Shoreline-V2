@@ -34,7 +34,7 @@ public class AuraModule extends CombatModule
             .setDefaultValue(4.0f).setMin(0.5f).setMax(6.0f).setFormat("m")
             .setDescription("The range to attack entities").build();
     Setting<Float> delay = new NumberSetting.Builder<Float>("Delay")
-            .setDefaultValue(1.0f).setMin(0.0f).setMax(1.0f)
+            .setDefaultValue(1.0f).setMin(0.0f).setMax(1.0f).setRoundingScale(2)
             .setDescription("The delay between hits").build();
     Setting<Boolean> multitask = new BooleanSetting.Builder("Multitask")
             .setDescription("Allows you to use items while attacking")

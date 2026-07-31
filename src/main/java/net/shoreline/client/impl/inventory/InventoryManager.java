@@ -267,7 +267,10 @@ public class InventoryManager extends NetworkHandler
             {
                 if (isSilentSwapping())
                 {
-                    int returnSlot = multitick.isSwapped() && !mc.player.isUsingItem() ? multitick.getSlotTo() : playerInventory.getSelectedSlot();
+                    int returnSlot = multitick.isSwapped() && !mc.player.isUsingItem()
+                            ? multitick.getSlotTo()
+                            : playerInventory.getSelectedSlot();
+
                     sendPacket(new ServerboundSetCarriedItemPacket(returnSlot));
                 }
             }

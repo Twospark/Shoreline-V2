@@ -17,7 +17,7 @@ public class SprintModule extends Toggleable
 
     public SprintModule()
     {
-        super("Sprint", new String[]{"AutoSprint"}, "Automaticly sprints for you", Category.MOVEMENT);
+        super("Sprint", new String[]{"AutoSprint"}, "Automatically sprints for you", Category.MOVEMENT);
     }
 
     private enum SprintMode
