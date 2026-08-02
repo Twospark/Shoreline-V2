@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Getter
 @Setter
-public class DynamicElement extends Element
+public abstract class DynamicElement extends Element
 {
     /** A list of entries. */
     private final List<DynamicEntry> entries = new CopyOnWriteArrayList<>();
@@ -38,6 +38,13 @@ public class DynamicElement extends Element
     }
 
     /**
+     * Use this method to load entries.
+     * <p>
+     * Called when minecraft is fully done loaded.
+     */
+    public abstract void loadEntries();
+
+    /**
      * Draws all visible entries and caches this elements width.
      *
      * @param graphics the GuiGraphicsExtractor to render the entries with.
@@ -50,10 +57,9 @@ public class DynamicElement extends Element
         cacheWidth();
 
         float centerW = mc.getWindow().getGuiScaledWidth() / 2f;
-        float centerH = mc.getWindow().getGuiScaledWidth() / 2f;
+        float centerH = mc.getWindow().getGuiScaledHeight() / 2f;
         top  = getY() + (getHeight() / 2.0f) < centerH;
         left = getX() + (getWidth()  / 2.0f) < centerW;
-
     }
 
     @Override

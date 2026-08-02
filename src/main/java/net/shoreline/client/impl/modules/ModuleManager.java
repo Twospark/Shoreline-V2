@@ -2,15 +2,23 @@ package net.shoreline.client.impl.modules;
 
 import lombok.Getter;
 import net.shoreline.client.api.element.Element;
+import net.shoreline.client.api.element.dynamic.DynamicElement;
 import net.shoreline.client.api.module.Module;
 import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.registry.OrderedRegistry;
 import net.shoreline.client.api.registry.RegistryFeature;
 import net.shoreline.client.api.setting.util.SettingContainer;
+import net.shoreline.client.impl.event.ClientEvent;
 import net.shoreline.client.impl.event.input.KeyboardEvent;
 import net.shoreline.client.impl.modules.client.*;
-import net.shoreline.client.impl.modules.combat.AuraModule;
+import net.shoreline.client.impl.modules.combat.*;
+import net.shoreline.client.impl.modules.hud.ModulesElement;
 import net.shoreline.client.impl.modules.hud.WatermarkElement;
+import net.shoreline.client.impl.modules.misc.FakePlayerModule;
+import net.shoreline.client.impl.modules.movement.SprintModule;
+import net.shoreline.client.impl.modules.world.AirPlaceModule;
+import net.shoreline.client.impl.modules.world.AutoToolModule;
+import net.shoreline.client.impl.modules.world.SpeedMineModule;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
 
@@ -31,6 +39,7 @@ public class ModuleManager extends RegistryFeature<Module>
         register(
                 new ClickGuiModule(),
                 new HudModule(),
+                new InteractionsModule(),
                 new InventoryModule(),
                 new LatencyModule(),
                 new RotationsModule(),
@@ -38,7 +47,21 @@ public class ModuleManager extends RegistryFeature<Module>
                 new ThemeModule(),
 
                 new AuraModule(),
+                new AutoCrystalModule(),
+                new AutoMineModule(),
+                new AutoTotemModule(),
+                new FeetTrapModule(),
+                new OffhandGappleModule(),
 
+                new FakePlayerModule(),
+
+                new SprintModule(),
+
+                new AirPlaceModule(),
+                new AutoToolModule(),
+                new SpeedMineModule(),
+
+                new ModulesElement(),
                 new WatermarkElement()
         );
 
@@ -64,6 +87,20 @@ public class ModuleManager extends RegistryFeature<Module>
             {
                 toggleable.toggle();
             }
+        }
+    }
+
+    @Subscribe
+    public void onLoaded(ClientEvent.McLoaded event)
+    {
+        for (Element element : getElements())
+        {
+            if (!(element instanceof DynamicElement dynamicElement))
+            {
+                continue;
+            }
+
+            dynamicElement.loadEntries();
         }
     }
 

@@ -10,6 +10,7 @@ import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.BooleanSetting;
+import net.shoreline.client.util.entity.EntityUtil;
 
 public class EntityTypeModule extends Toggleable
 {
@@ -40,8 +41,15 @@ public class EntityTypeModule extends Toggleable
         return switch (entity)
         {
             case Player player when targetPlayers.getValue() -> true;
-            case Monster monster when targetHostiles.getValue() -> true;
-            default -> entity instanceof Animal && targetPassives.getValue();
+            case Monster monster when targetHostiles.getValue() -> EntityUtil.isHostile(entity);
+            default -> entity instanceof Animal && targetPassives.getValue() && EntityUtil.isPassive(entity);
         };
+    }
+
+    public boolean isValid(EntityType<?> entityType)
+    {
+        return entityType == EntityType.PLAYER && targetPlayers.getValue()
+                || EntityUtil.isHostile(entityType) && targetHostiles.getValue()
+                || EntityUtil.isPassive(entityType) && targetPassives.getValue();
     }
 }

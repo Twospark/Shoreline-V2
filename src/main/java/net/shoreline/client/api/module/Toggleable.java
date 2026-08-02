@@ -17,6 +17,9 @@ public class Toggleable extends Module
             .setDescription("The module keybind")
             .setNameAliases("Keybind")
             .setDefaultValue(Bind.none()).build();
+    private final Setting<Boolean> hidden = new BooleanSetting.Builder("Hidden")
+            .setDescription("If the module is hidden")
+            .setDefaultValue(false).build();
     private final Setting<Boolean> notify = new BooleanSetting.Builder("Notify")
             .setDescription("Notifies in chat on toggle")
             .setVisible(() -> false)
@@ -49,6 +52,11 @@ public class Toggleable extends Module
     public boolean isEnabled()
     {
         return enabled.getValue();
+    }
+
+    public boolean isHidden()
+    {
+        return hidden.getValue();
     }
 
     public void enable()

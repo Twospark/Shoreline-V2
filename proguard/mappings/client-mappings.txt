@@ -1268,7 +1268,7 @@ net.shoreline.client.impl.block.AsyncBlockState -> net.shoreline.client.bg:
     14:14:net.minecraft.class_2680 getBlockState() -> cS
     15:15:net.minecraft.class_3610 getFluidState() -> cT
     16:16:net.minecraft.class_2586 getBlockEntity() -> cU
-net.shoreline.client.impl.block.AsyncBlockView -> net.shoreline.client.bh:
+net.shoreline.client.impl.block.AsyncBlockGetter -> net.shoreline.client.bh:
     java.util.concurrent.ConcurrentMap blockStates -> eA
     12:14:void <init>() -> <init>
     19:19:net.minecraft.class_2680 method_8320(net.minecraft.class_2338) -> method_8320
@@ -1303,7 +1303,7 @@ net.shoreline.client.impl.block.AsyncShapeContext -> net.shoreline.client.bl:
     40:40:boolean method_27866(net.minecraft.class_3610,net.minecraft.class_3610) -> method_27866
     46:46:net.minecraft.class_265 method_62878(net.minecraft.class_2680,net.minecraft.class_1941,net.minecraft.class_2338) -> a
     14:14:void <init>(net.shoreline.client.impl.world.LivingEntityState) -> <init>
-net.shoreline.client.impl.block.BlockScanner -> net.shoreline.client.bm:
+net.shoreline.client.impl.block.AsyncBlockScanner -> net.shoreline.client.bm:
     net.minecraft.class_2338$class_2339 mPos -> eJ
     15:28:void scan(net.minecraft.class_638,net.minecraft.class_2338) -> c
     void visit(net.minecraft.class_638,net.minecraft.class_2338,net.minecraft.class_2680) -> a

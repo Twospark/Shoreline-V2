@@ -2,6 +2,7 @@ package net.shoreline.client.asm.mixins;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.thread.ShorelineExecutor;
@@ -17,6 +18,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft
 {
+    @Inject(
+            method = "<init>",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;" +
+                            "setOverlay(Lnet/minecraft/client/gui/screens/Overlay;)V",
+            shift = At.Shift.AFTER))
+    private static void ctrHook_Finished(GameConfig gameConfig, CallbackInfo ci)
+    {
+        ClientEvent.McLoaded event = new ClientEvent.McLoaded();
+        EventBus.getInstance().post(event);
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void tickHook(CallbackInfo info)
     {

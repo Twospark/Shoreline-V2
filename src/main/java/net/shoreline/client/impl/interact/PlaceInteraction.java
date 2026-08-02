@@ -94,7 +94,7 @@ public class PlaceInteraction extends Interaction<BlockPos>
         if (!clientInteract || !mc.isSameThread())
         {
             sendSequencedPacket(id -> new ServerboundUseItemOnPacket(hand, result, id));
-            Managers.INTERACT.playBlockPlaceSound(interact, getState());
+            Managers.INTERACTION.playBlockPlaceSound(interact, getState());
             return InteractionResult.SUCCESS;
         }
         else

@@ -8,13 +8,18 @@
     "connection.MixinConnection",
     "connection.MixinLocalPlayer",
     "connection.MixinMultiPlayerGameMode",
+    "entity.MixinLivingEntity",
     "entity.player.MixinInventory",
     "entity.player.MixinPlayer",
     "gui.MixinGui",
     "input.MixinClientInput",
     "input.MixinKeyboardHandler",
     "input.MixinKeyboardInput",
-    "level.MixinClientLevel"
+    "level.MixinBlockCollisions",
+    "level.MixinClientLevel",
+    "render.MixinLevelRenderer",
+    "render.entity.MixinEntityRenderDispatcher",
+    "render.entity.MixinLivingEntityRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -9,6 +9,7 @@ import net.shoreline.client.impl.event.input.PlayerInputEvent;
 import net.shoreline.client.impl.event.network.MovementPacketsEvent;
 import net.shoreline.client.impl.event.network.PlayerUpdateEvent;
 import net.shoreline.client.impl.event.network.SetHandEvent;
+import net.shoreline.client.impl.event.network.StopSprintingEvent;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
 public class MixinLocalPlayer
@@ -107,5 +109,17 @@ public class MixinLocalPlayer
     {
         PlayerInputEvent event = new PlayerInputEvent(input);
         EventBus.getInstance().post(event);
+    }
+
+    @Inject(method = "shouldStopRunSprinting", at = @At(value = "HEAD"), cancellable = true)
+    private void shouldStopSprintingHook(CallbackInfoReturnable<Boolean> cir)
+    {
+        StopSprintingEvent event = new StopSprintingEvent();
+        EventBus.getInstance().post(event);
+        if (event.isCanceled())
+        {
+            cir.cancel();
+            cir.setReturnValue(false);
+        }
     }
 }

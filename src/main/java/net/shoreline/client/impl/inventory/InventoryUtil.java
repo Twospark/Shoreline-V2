@@ -168,13 +168,13 @@ public class InventoryUtil implements Globals
         return count;
     }
 
-    public int getPacketSlotIndex(AbstractContainerMenu handler, int slot)
+    public static int getPacketSlotIndex(AbstractContainerMenu handler, int slot)
     {
         if (handler instanceof InventoryMenu)
         {
             if (slot == Inventory.SLOT_OFFHAND)
             {
-                return OFFHAND_SLOT;
+                return Inventory.SLOT_OFFHAND;
             }
 
             if (slot > 100)
@@ -182,7 +182,7 @@ public class InventoryUtil implements Globals
                 return 108 - slot;
             }
 
-            return slot < Inventory.getSelectionSize() ? slot + Inventory.INVENTORY_SIZE : slot;
+            return slot < Inventory.SELECTION_SIZE ? slot + Inventory.INVENTORY_SIZE : slot;
         }
 
         final List<Slot> slots = handler.slots;

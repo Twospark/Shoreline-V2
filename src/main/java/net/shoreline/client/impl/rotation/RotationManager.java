@@ -6,7 +6,9 @@ import net.minecraft.client.player.ClientInput;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Input;
+import net.shoreline.client.Shoreline;
 import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.entity.player.JumpEvent;
 import net.shoreline.client.impl.event.entity.player.TravelEvent;
 import net.shoreline.client.impl.event.input.PlayerInputEvent;
 import net.shoreline.client.impl.event.network.MovementPacketsEvent;
@@ -16,6 +18,7 @@ import net.shoreline.client.impl.modules.client.RotationsModule;
 import net.shoreline.client.impl.network.NetworkHandler;
 import net.shoreline.client.impl.rotation.handler.CorrectionHandler;
 import net.shoreline.client.impl.rotation.handler.RotationHandler;
+import net.shoreline.client.impl.rotation.handler.RotationRenderer;
 import net.shoreline.client.impl.rotation.util.ClientRotationEvent;
 import net.shoreline.client.impl.rotation.util.Rotation;
 import net.shoreline.eventbus.EventBus;
@@ -30,6 +33,7 @@ public class RotationManager extends NetworkHandler
 
     private final CorrectionHandler correction;
     private final RotationHandler handler;
+    private final RotationRenderer renderer;
     private final Rotation serverRotation;
 
     private Rotation clientRotation;
@@ -40,10 +44,9 @@ public class RotationManager extends NetworkHandler
         super("Rotations");
         this.handler = new RotationHandler();
         this.correction = new CorrectionHandler();
+        this.renderer = new RotationRenderer();
         this.serverRotation = new Rotation(0.0f, 0.0f);
         EventBus.getInstance().subscribe(this);
-        EventBus.getInstance().register(this, new LambdaListener<>
-                (PacketEvent.Send.class, ServerboundMovePlayerPacket.class, this::onMovePlayer));
     }
 
     @Subscribe
@@ -55,8 +58,7 @@ public class RotationManager extends NetworkHandler
             setClientRotation(rotationUpdate);
         }
 
-        serverRotation.setYaw(rotationUpdate.getYaw());
-        serverRotation.setPitch(rotationUpdate.getPitch());
+        setServerRotation(rotationUpdate);
     }
 
     @Subscribe(priority = Integer.MIN_VALUE)
@@ -82,11 +84,14 @@ public class RotationManager extends NetworkHandler
         EventBus.getInstance().post(rotationEvent);
         if (rotationEvent.isCanceled())
         {
-            setClientRotation(rotationEvent.getRotation());
+            Rotation rotation = rotationEvent.getRotation();
+            setClientRotation(rotation);
+            renderer.update(rotation.getYaw(), rotation.getPitch());
         }
         else if (hasClientRotation())
         {
             handler.resetRotations(playerRotation, 1.0f);
+            renderer.update(playerRotation.getYaw(), playerRotation.getPitch());
         }
     }
 
@@ -108,6 +113,28 @@ public class RotationManager extends NetworkHandler
         if (rotationsConfig.getTickSync().getValue())
         {
             event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onJumpPre(JumpEvent.Pre event)
+    {
+        if (rotationsConfig.getMoveFix().getValue() != RotationsModule.MoveFix.NONE)
+        {
+            preJumpRotation = new Rotation(mc.player);
+            if (hasClientRotation())
+            {
+                clientRotation.applyToPlayer();
+            }
+        }
+    }
+
+    @Subscribe
+    public void onJumpPost(JumpEvent.Post event)
+    {
+        if (rotationsConfig.getMoveFix().getValue() != RotationsModule.MoveFix.NONE)
+        {
+            preJumpRotation.applyToPlayer();
         }
     }
 
@@ -160,19 +187,30 @@ public class RotationManager extends NetworkHandler
         }
     }
 
-    public void onMovePlayer(PacketEvent.Send<ServerboundMovePlayerPacket> event)
+    @Subscribe
+    public void onMovePlayer(PacketEvent.Send<?> event)
     {
-        if (checkNull())
+        if (checkNull() || !(event.getPacket() instanceof ServerboundMovePlayerPacket p))
         {
             return;
         }
 
-        ServerboundMovePlayerPacket p = event.getPacket();
         if (p.hasRotation())
         {
-            serverRotation.setYaw(p.getYRot(0.0f));
-            serverRotation.setPitch(p.getXRot(0.0f));
+            setServerRotation(p.getYRot(0.0f), p.getXRot(0.0f));
         }
+    }
+
+    private void setServerRotation(Rotation rotation)
+    {
+        setServerRotation(rotation.getYaw(), rotation.getPitch());
+    }
+
+    private void setServerRotation(float yaw, float pitch)
+    {
+        serverRotation.setYaw(yaw);
+        serverRotation.setPitch(pitch);
+        renderer.update(yaw, pitch);
     }
 
     /**

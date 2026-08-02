@@ -30,6 +30,8 @@ import net.shoreline.eventbus.api.Subscribe;
 
 public class AuraModule extends CombatModule
 {
+    public static AuraModule INSTANCE;
+
     Setting<Float> attackRange = new NumberSetting.Builder<Float>("Range")
             .setDefaultValue(4.0f).setMin(0.5f).setMax(6.0f).setFormat("m")
             .setDescription("The range to attack entities").build();
@@ -94,6 +96,7 @@ public class AuraModule extends CombatModule
     public AuraModule()
     {
         super("Aura", new String[]{"KillAura"}, "Automaticly attacks entities around you", Category.COMBAT);
+        INSTANCE = this;
     }
 
     @Override
@@ -113,7 +116,7 @@ public class AuraModule extends CombatModule
     public void onClientRotation(ClientRotationEvent event)
     {
         running = false;
-        if (checkNull() || event.isCanceled() || mc.player.isSpectator())
+        if (checkNull() || event.isCanceled() || mc.player.isSpectator() || AutoCrystalModule.INSTANCE.isRunning())
         {
             return;
         }
