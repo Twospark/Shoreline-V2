@@ -16,6 +16,8 @@ import net.shoreline.client.impl.modules.hud.ModulesElement;
 import net.shoreline.client.impl.modules.hud.WatermarkElement;
 import net.shoreline.client.impl.modules.misc.FakePlayerModule;
 import net.shoreline.client.impl.modules.movement.SprintModule;
+import net.shoreline.client.impl.modules.movement.VelocityModule;
+import net.shoreline.client.impl.modules.render.BlockHighlightModule;
 import net.shoreline.client.impl.modules.world.AirPlaceModule;
 import net.shoreline.client.impl.modules.world.AutoToolModule;
 import net.shoreline.client.impl.modules.world.SpeedMineModule;
@@ -56,6 +58,9 @@ public class ModuleManager extends RegistryFeature<Module>
                 new FakePlayerModule(),
 
                 new SprintModule(),
+                new VelocityModule(),
+
+                new BlockHighlightModule(),
 
                 new AirPlaceModule(),
                 new AutoToolModule(),

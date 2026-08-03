@@ -1,4 +1,4 @@
-package net.shoreline.client.impl.event.connection;
+package net.shoreline.client.impl.event.network;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

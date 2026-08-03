@@ -137,11 +137,9 @@ public class TrapPositionCalc
             BlockPos extend = pos.relative(direction);
             if (origin.contains(extend))
             {
-                Shoreline.info("cont");
                 continue;
             }
 
-            Shoreline.info(direction.getName());
             trapPositions.put(extend, trapLayer);
         }
     }

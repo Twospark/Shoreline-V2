@@ -96,7 +96,6 @@ public class PlacerModule extends CombatModule
 
             if (!canPlaceBlock(blockPos, block))
             {
-                Shoreline.info("cant place");
                 continue;
             }
 
@@ -106,12 +105,6 @@ public class PlacerModule extends CombatModule
 
     protected boolean canPlaceBlock(BlockPos blockPos, Block block)
     {
-        boolean canBeReplaced = mc.level.getBlockState(blockPos).canBeReplaced();
-        if (!canBeReplaced)
-        {
-            Shoreline.info("wtf");
-        }
-
         return mc.level.getBlockState(blockPos).canBeReplaced()
                 && Managers.INTERACTION.canPlaceBlock(blockPos, block);
     }

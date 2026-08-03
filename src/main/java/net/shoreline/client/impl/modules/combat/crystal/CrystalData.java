@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import net.shoreline.client.impl.level.entity.state.EntityState;
 import net.shoreline.client.impl.level.entity.state.LivingEntityState;
 import net.shoreline.client.impl.modules.combat.AutoCrystalModule;
+import net.shoreline.client.impl.render.animation.Animation;
 
 import java.util.TreeSet;
 
@@ -25,6 +26,9 @@ public class CrystalData<T>
 
     @Exclude
     private double damageToTarget, damageToPlayer;
+
+    @Exclude
+    private final Animation animation = new Animation(true, 250);
 
     @Getter
     public static class Immediate<T> extends CrystalData<T>

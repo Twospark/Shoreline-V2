@@ -3,8 +3,7 @@ package net.shoreline.client.impl.modules.combat;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ServerboundSwingPacket;
-import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EndCrystalItem;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +30,9 @@ import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.*;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.TickEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
+import net.shoreline.client.impl.event.render.AddEntityEvent;
+import net.shoreline.client.impl.event.render.RenderWorldEvent;
 import net.shoreline.client.impl.interact.PlaceInteraction;
 import net.shoreline.client.impl.inventory.InventoryUtil;
 import net.shoreline.client.impl.inventory.SilentSwapType;
@@ -37,6 +40,7 @@ import net.shoreline.client.impl.inventory.SwapHandler;
 import net.shoreline.client.impl.level.entity.state.EntityState;
 import net.shoreline.client.impl.level.entity.state.LivingEntityState;
 import net.shoreline.client.impl.mining.MiningData;
+import net.shoreline.client.impl.modules.client.ThemeModule;
 import net.shoreline.client.impl.modules.combat.crystal.CrystalCalcManager;
 import net.shoreline.client.impl.modules.combat.crystal.CrystalData;
 import net.shoreline.client.impl.modules.combat.crystal.CrystalOptimizer;
@@ -44,6 +48,10 @@ import net.shoreline.client.impl.modules.impl.ObsidianPlacerModule;
 import net.shoreline.client.impl.modules.impl.Priorities;
 import net.shoreline.client.impl.modules.world.SpeedMineModule;
 import net.shoreline.client.impl.network.NetworkUtil;
+import net.shoreline.client.impl.render.BoxRender;
+import net.shoreline.client.impl.render.ClientRenderer;
+import net.shoreline.client.impl.render.animation.Animation;
+import net.shoreline.client.impl.render.animation.Easing;
 import net.shoreline.client.impl.rotation.RotationUtil;
 import net.shoreline.client.impl.rotation.util.ClientRotationEvent;
 import net.shoreline.client.impl.rotation.util.RotateMode;
@@ -51,10 +59,13 @@ import net.shoreline.client.impl.rotation.util.Rotation;
 import net.shoreline.client.util.entity.DamageUtil;
 import net.shoreline.client.impl.level.explosion.ExplosionUtil;
 import net.shoreline.client.util.level.LevelUtil;
+import net.shoreline.client.util.math.PerSecond;
+import net.shoreline.client.util.math.QueueAverage;
 import net.shoreline.client.util.math.Timer;
 import net.shoreline.eventbus.api.Subscribe;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -213,7 +224,14 @@ public class AutoCrystalModule extends ObsidianPlacerModule
     private CrystalData<BlockPos> currentPlace;
     private CrystalData<EntityState> currentAttack;
 
+    private final QueueAverage breakTime = new QueueAverage(20, 1000L);
+    private final PerSecond cps = new PerSecond();
+
+    private final ConcurrentMap<BlockPos, CrystalData<BlockPos>> fadeAnimations = new ConcurrentHashMap<>();
+
     private boolean silentRotated;
+
+    private long highestId;
 
     public AutoCrystalModule()
     {
@@ -286,7 +304,8 @@ public class AutoCrystalModule extends ObsidianPlacerModule
         if (currentPlace != null)
         {
             rotations = runPlace(currentPlace, hand);
-        } else if (SpeedMineModule.INSTANCE.isUsedByAutoMine() && predictPlace.getValue() != Timing.OFF)
+        }
+        else if (SpeedMineModule.INSTANCE.isUsedByAutoMine() && predictPlace.getValue() != Timing.OFF)
         {
             MiningData currentMine = SpeedMineModule.INSTANCE.getMainMiningBlock();
             CrystalData.Immediate<BlockPos> prePlaceData = validateMiningData(currentMine);
@@ -308,6 +327,171 @@ public class AutoCrystalModule extends ObsidianPlacerModule
             event.setCanceled(true  );
             event.setYaw(rotations[0]);
             event.setPitch(rotations[1]);
+        }
+    }
+
+    @Subscribe
+    public void onAddEntity(AddEntityEvent event)
+    {
+        if (checkNull() || event.getType() != EntityType.END_CRYSTAL)
+        {
+            return;
+        }
+
+        Vec3 crystalPos = event.getPos();
+        BlockPos crystalBase = BlockPos.containing(crystalPos.relative(Direction.DOWN, 1.0));
+
+        if (!placePackets.keySet().removeIf(d -> d.getPos().equals(crystalBase)))
+        {
+            return;
+        }
+
+        InteractionHand hand = getCrystalHand();
+        if (sequentialBreak.getValue())
+        {
+            attackCrystal(event.getEntityId(), hand);
+            attackTimer.reset();
+        }
+
+        if (currentPlace != null && sequentialPlace.getValue())
+        {
+            placeCrystal(currentPlace.getValue(), currentPlace.getCrystalVec(), hand);
+        }
+
+        if (predictAttack.getValue())
+        {
+            int nextAttackId = (int) (highestId + 1);
+            Entity entity = mc.level.getEntity(nextAttackId);
+            if (entity == null)
+            {
+                attackCrystal(nextAttackId, hand);
+            }
+        }
+    }
+
+    @Subscribe
+    public void onPacketInbound(PacketEvent.Receive<?> event)
+    {
+        if (event.getPacket() instanceof ClientboundRemoveEntitiesPacket packet)
+        {
+            for (int id : packet.getEntityIds())
+            {
+                Long time = attackPackets.remove(id);
+                if (time != null)
+                {
+                    cps.count();
+                    breakTime.add(System.currentTimeMillis() - time);
+                }
+            }
+        }
+
+        if (event.getPacket() instanceof ClientboundAddEntityPacket packet && packet.getId() > highestId)
+        {
+            highestId = packet.getId();
+        }
+
+        if (checkNull() || predictPlace.getValue() != Timing.INSTANT || currentPlace != null)
+        {
+            return;
+        }
+
+        MiningData currentMine = SpeedMineModule.INSTANCE.getMainMiningBlock();
+        if (currentMine == null)
+        {
+            return;
+        }
+
+        InteractionHand hand = getCrystalHand();
+        if (!AutoMineModule.INSTANCE.isEnabled() || !SpeedMineModule.INSTANCE.isEnabled())
+        {
+            return;
+        }
+
+        if (event.getPacket() instanceof ClientboundBlockUpdatePacket packet && packet.getBlockState().isAir())
+        {
+            CrystalData.Immediate<BlockPos> prePlace = validateMiningData(currentMine);
+            if (prePlace == null)
+            {
+                return;
+            }
+
+            if (packet.getPos().equals(prePlace.getValue().above()))
+            {
+                runPlaceInternal(prePlace, hand);
+            }
+        }
+
+        if (event.getPacket() instanceof ClientboundRemoveEntitiesPacket packet)
+        {
+            for (int id : packet.getEntityIds())
+            {
+                Entity entity = mc.level.getEntity(id);
+                if (entity instanceof ItemEntity)
+                {
+                    BlockPos pos = entity.blockPosition();
+                    CrystalData.Immediate<BlockPos> prePlace = validateMiningData(currentMine);
+                    if (prePlace == null)
+                    {
+                        continue;
+                    }
+
+                    if (pos.equals(prePlace.getValue().above()))
+                    {
+                        runPlaceInternal(prePlace, hand);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (event.getPacket() instanceof ClientboundTakeItemEntityPacket packet)
+        {
+            Entity entity = mc.level.getEntity(packet.getPlayerId());
+            if (entity instanceof ItemEntity)
+            {
+                BlockPos pos = entity.blockPosition();
+                CrystalData.Immediate<BlockPos> prePlace = validateMiningData(currentMine);
+                if (prePlace == null)
+                {
+                    return;
+                }
+
+                if (pos.equals(prePlace.getValue().above()))
+                {
+                    runPlaceInternal(prePlace, hand);
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    public void onRenderLevel(RenderWorldEvent event)
+    {
+        ClientRenderer renderer = event.getRenderer();
+        if (currentPlace != null)
+        {
+            fadeAnimations.put(currentPlace.getValue(), currentPlace);
+        }
+
+        for (Map.Entry<BlockPos, CrystalData<BlockPos>> entry : fadeAnimations.entrySet())
+        {
+            BlockPos placePos = entry.getKey();
+            CrystalData<BlockPos> placeData = entry.getValue();
+            Animation anim = placeData.getAnimation();
+
+            if (anim.getFactor() <= 0.01)
+            {
+                fadeAnimations.remove(placePos);
+                continue;
+            }
+
+            double animFactor = Easing.SMOOTH.ease(anim.getFactor());
+            if (currentPlace == null || !currentPlace.getValue().equals(placePos))
+            {
+                anim.setState(false);
+            }
+
+            BoxRender.FILL.render(renderer, placePos, ThemeModule.INSTANCE.getPrimary(), (float) animFactor);
         }
     }
 

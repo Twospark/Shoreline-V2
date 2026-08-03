@@ -10,7 +10,7 @@ import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.EnumSetting;
 import net.shoreline.client.impl.event.TickEvent;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.eventbus.api.Subscribe;
 
 import java.util.IdentityHashMap;

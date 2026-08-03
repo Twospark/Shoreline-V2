@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.shoreline.client.asm.ducks.connection.IConnection;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.eventbus.EventBus;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;

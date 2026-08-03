@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.asm.ducks.connection.IClientPacketListener;
 import net.shoreline.client.asm.ducks.level.IClientLevel;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.eventbus.EventBus;
 
 import java.util.ArrayList;

@@ -13,14 +13,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.shoreline.client.Shoreline;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.TickEvent;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.event.level.BlockCollisionEvent;
 import net.shoreline.client.impl.inventory.SilentSwapType;
 import net.shoreline.client.impl.modules.client.InteractionsModule;
@@ -164,7 +161,6 @@ public class InteractionManager extends NetworkHandler
 
         if (check(blockPos) || isEntityBlocking(blockPos, placeInteraction.getBlock(), true))
         {
-            Shoreline.info("failed check");
             return false;
         }
 

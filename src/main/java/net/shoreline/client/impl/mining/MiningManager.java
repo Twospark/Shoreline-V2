@@ -11,7 +11,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.shoreline.client.api.common.Feature;
 import net.shoreline.client.impl.event.LevelEvent;
 import net.shoreline.client.impl.event.TickEvent;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.util.item.EnchantUtil;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;

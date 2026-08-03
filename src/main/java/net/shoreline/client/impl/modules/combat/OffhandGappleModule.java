@@ -11,9 +11,11 @@ import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.impl.event.TickEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.inventory.InventoryUtil;
 import net.shoreline.client.impl.modules.impl.InventorySwapModule;
 import net.shoreline.client.impl.modules.impl.Priorities;
+import net.shoreline.client.util.item.ItemUtil;
 import net.shoreline.eventbus.api.Subscribe;
 
 @Getter
@@ -35,6 +37,7 @@ public class OffhandGappleModule extends InventorySwapModule
             .setDefaultValue(true).build();
 
     private boolean isGappleInOffHand;
+    private boolean clearedTotem;
 
     @Setter
     private int returnSlot = InventoryUtil.INVALID_SLOT;
@@ -74,12 +77,7 @@ public class OffhandGappleModule extends InventorySwapModule
     {
         ItemStack defaultStack = item.getDefaultInstance();
         return swords.getValue() && defaultStack.is(ItemTags.SWORDS)
-                || tools.getValue() && isTool(defaultStack)
+                || tools.getValue() && ItemUtil.isTool(defaultStack)
                 || totem.getValue() && item == Items.TOTEM_OF_UNDYING;
-    }
-
-    private boolean isTool(ItemStack stack)
-    {
-        return stack.is(ItemTags.SHOVELS) || stack.is(ItemTags.AXES) || stack.is(ItemTags.PICKAXES);
     }
 }

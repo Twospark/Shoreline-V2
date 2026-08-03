@@ -8,6 +8,8 @@
     "connection.MixinConnection",
     "connection.MixinLocalPlayer",
     "connection.MixinMultiPlayerGameMode",
+    "connection.packet.server.MixinClientboundExplodePacket",
+    "connection.packet.server.MixinClientboundSetEntityMotionPacket",
     "entity.MixinLivingEntity",
     "entity.player.MixinInventory",
     "entity.player.MixinPlayer",

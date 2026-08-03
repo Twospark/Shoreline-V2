@@ -13,7 +13,7 @@ import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.impl.NumberSetting;
 import net.shoreline.client.api.setting.impl.SettingGroup;
 import net.shoreline.client.impl.Managers;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.event.network.PlayerUpdateEvent;
 import net.shoreline.client.impl.modules.combat.trap.TrapLayer;
 import net.shoreline.client.impl.modules.combat.trap.TrapModule;
@@ -106,7 +106,6 @@ public class FeetTrapModule extends TrapModule
             return;
         }
 
-        Shoreline.info(placements.size() + "");
         for (BlockPos placement : placements)
         {
             placeObby(placement);

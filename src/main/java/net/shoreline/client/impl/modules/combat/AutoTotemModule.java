@@ -2,11 +2,16 @@ package net.shoreline.client.impl.modules.combat;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DeathProtection;
+import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
@@ -15,6 +20,8 @@ import net.shoreline.client.api.setting.impl.EnumSetting;
 import net.shoreline.client.api.setting.impl.NumberSetting;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.TickEvent;
+import net.shoreline.client.impl.event.network.DeathProtectionEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.inventory.InventoryUtil;
 import net.shoreline.client.impl.modules.impl.InventorySwapModule;
 import net.shoreline.client.impl.modules.impl.Priorities;
@@ -126,6 +133,47 @@ public class AutoTotemModule extends InventorySwapModule
         }
 
         swapItemWithSlot(requiredItem, Inventory.SLOT_OFFHAND, fastSwap.getValue());
+    }
+
+    @Subscribe
+    public void onPacketReceive(PacketEvent.Receive<?> event)
+    {
+        if (checkNull() || !instant.getValue())
+        {
+            return;
+        }
+
+        if (event.getPacket() instanceof ClientboundEntityEventPacket packet
+                && packet.getEntity(mc.level) == mc.player
+                && packet.getEventId() == EntityEvent.PROTECTED_FROM_DEATH)
+        {
+            ItemStack stack = mc.player.getOffhandItem();
+            DeathProtection deathProtectionComponent = stack.get(DataComponents.DEATH_PROTECTION);
+            if (deathProtectionComponent == null)
+            {
+                return;
+            }
+
+            stack.shrink(1);
+            swapItemWithSlot(Items.TOTEM_OF_UNDYING, Inventory.SLOT_OFFHAND, fastSwap.getValue());
+            clearedTotem = true;
+        }
+
+        if (event.getPacket() instanceof ClientboundContainerSetContentPacket packet
+                && packet.items().get(45).getItem().equals(Items.AIR) && clearedTotem)
+        {
+            event.setCanceled(true);
+            clearedTotem = false;
+        }
+    }
+
+    @Subscribe
+    public void onDeathProtection(DeathProtectionEvent event)
+    {
+        if (instant.getValue())
+        {
+            event.setCanceled(true);
+        }
     }
 
     @RequiredArgsConstructor

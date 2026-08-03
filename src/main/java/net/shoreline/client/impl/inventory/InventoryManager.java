@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.shoreline.client.impl.event.LevelEvent;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.event.entity.player.AddItemEvent;
 import net.shoreline.client.impl.event.item.ItemUseEvent;
 import net.shoreline.client.impl.event.network.SetHandEvent;

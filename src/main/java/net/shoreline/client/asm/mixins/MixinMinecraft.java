@@ -6,18 +6,25 @@ import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.thread.ShorelineExecutor;
+import net.shoreline.client.asm.ducks.IMinecraft;
 import net.shoreline.client.impl.event.ClientEvent;
 import net.shoreline.client.impl.event.LevelEvent;
 import net.shoreline.client.impl.event.TickEvent;
+import net.shoreline.client.impl.event.render.ScreenEvent;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
-public abstract class MixinMinecraft
+public abstract class MixinMinecraft implements IMinecraft
 {
+    @Override
+    @Invoker(value = "startUseItem")
+    public abstract void shoreline$startUseItem();
+
     @Inject(
             method = "<init>",
             at = @At(
@@ -56,6 +63,13 @@ public abstract class MixinMinecraft
     private void disconnectHook(Screen screen, boolean keepResourcePacks, CallbackInfo info)
     {
         LevelEvent.Disconnect event = new LevelEvent.Disconnect();
+        EventBus.getInstance().post(event);
+    }
+
+    @Inject(method = "setScreen", at = @At(value = "HEAD"))
+    private void setScreenHook(Screen screen, CallbackInfo info)
+    {
+        ScreenEvent event = new ScreenEvent(screen);
         EventBus.getInstance().post(event);
     }
 

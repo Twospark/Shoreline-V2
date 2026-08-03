@@ -2,12 +2,9 @@ package net.shoreline.client.impl.rotation;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.player.ClientInput;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Input;
-import net.shoreline.client.Shoreline;
-import net.shoreline.client.impl.event.connection.PacketEvent;
+import net.shoreline.client.impl.event.network.PacketEvent;
 import net.shoreline.client.impl.event.entity.player.JumpEvent;
 import net.shoreline.client.impl.event.entity.player.TravelEvent;
 import net.shoreline.client.impl.event.input.PlayerInputEvent;
@@ -23,7 +20,6 @@ import net.shoreline.client.impl.rotation.util.ClientRotationEvent;
 import net.shoreline.client.impl.rotation.util.Rotation;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
-import net.shoreline.eventbus.listener.LambdaListener;
 
 @Getter
 @Setter
