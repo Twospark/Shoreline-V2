@@ -446,7 +446,7 @@ public class AutoCrystalModule extends ObsidianPlacerModule
 
         if (event.getPacket() instanceof ClientboundTakeItemEntityPacket packet)
         {
-            Entity entity = mc.level.getEntity(packet.getPlayerId());
+            Entity entity = mc.level.getEntity(packet.getItemId());
             if (entity instanceof ItemEntity)
             {
                 BlockPos pos = entity.blockPosition();
