@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 public class ModuleManager extends RegistryFeature<Module>
 {
     private final List<Element> elements = new ArrayList<>();
+    private final List<String> moduleNames = new ArrayList<>();
 
     public ModuleManager()
     {
@@ -130,6 +131,10 @@ public class ModuleManager extends RegistryFeature<Module>
             if (module instanceof Element element)
             {
                 elements.add(element);
+            }
+            else
+            {
+                moduleNames.add(module.getName());
             }
 
             getRegistry().register(module);

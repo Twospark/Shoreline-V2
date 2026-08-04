@@ -2,6 +2,7 @@ package net.shoreline.client.impl;
 
 import lombok.experimental.UtilityClass;
 import net.shoreline.client.impl.combat.TargetManager;
+import net.shoreline.client.impl.command.manager.CommandManager;
 import net.shoreline.client.impl.config.ConfigManager;
 import net.shoreline.client.impl.event.ClientEvent;
 import net.shoreline.client.impl.interact.InteractionManager;
@@ -29,6 +30,7 @@ public class Managers
     public static SocialManager SOCIAL;
     public static MiningManager MINING;
     public static TargetManager TARGETING;
+    public static CommandManager COMMANDS;
 
     public void init()
     {
@@ -42,6 +44,7 @@ public class Managers
         SOCIAL      = new SocialManager();
         MINING      = new MiningManager();
         TARGETING   = new TargetManager();
+        COMMANDS    = new CommandManager();
         CONFIG      = new ConfigManager(); // configs last.
 
         EventBus.getInstance().post(new ClientEvent.Loaded());

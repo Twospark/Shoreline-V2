@@ -17,7 +17,7 @@ public class BindSetting extends Setting<Bind>
     @Override
     public void fromJson(JsonElement element)
     {
-
+        setValue(Bind.fromString(element.getAsString()));
     }
 
     @Override

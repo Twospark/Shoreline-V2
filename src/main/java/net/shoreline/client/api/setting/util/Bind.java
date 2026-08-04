@@ -25,6 +25,12 @@ public class Bind
         return new Bind(key);
     }
 
+    public static Bind fromString(String str)
+    {
+        int key = Keyboard.fromString(str);
+        return new Bind(key);
+    }
+
     @Override
     public String toString()
     {

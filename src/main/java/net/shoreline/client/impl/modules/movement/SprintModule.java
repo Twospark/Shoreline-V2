@@ -7,6 +7,7 @@ import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.impl.EnumSetting;
+import net.shoreline.client.api.setting.impl.NumberSetting;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.TickEvent;
 import net.shoreline.client.impl.event.entity.player.JumpEvent;
@@ -30,6 +31,12 @@ public class SprintModule extends Toggleable
             .setDescription("Fixes jumping slowdown in Rage sprint")
             .setVisible(() -> mode.getValue() == SprintMode.RAGE)
             .setDefaultValue(false).build();
+    Setting<Boolean> yawFix = new BooleanSetting.Builder("YawFix")
+            .setDescription("Fixes sprint stopping when yaw changes")
+            .setVisible(() -> mode.getValue() == SprintMode.RAGE)
+            .setDefaultValue(true).build();
+
+    private float lastSprintYaw = Float.NaN;
 
     public SprintModule()
     {
@@ -70,10 +77,20 @@ public class SprintModule extends Toggleable
                 float sprintYaw = InputUtil.getYawFromInput(mc.player.getYRot());
                 if (rotate.getValue() && !Managers.ROTATION.isFacingYaw(sprintYaw))
                 {
-                    mc.player.setSprinting(false);
+                    boolean shouldSprint = yawFix.getValue()
+                            && !Float.isNaN(lastSprintYaw)
+                            && Managers.ROTATION.isFacingYaw(lastSprintYaw);
+
+                    mc.player.setSprinting(shouldSprint);
+                    if (shouldSprint)
+                    {
+                        lastSprintYaw = sprintYaw;
+                    }
+
                     return;
                 }
 
+                lastSprintYaw = sprintYaw;
                 mc.player.setSprinting(true);
             }
         }

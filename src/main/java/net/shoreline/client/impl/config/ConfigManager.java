@@ -1,5 +1,6 @@
 package net.shoreline.client.impl.config;
 
+import lombok.Getter;
 import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.registry.OrderedRegistry;
 import net.shoreline.client.api.registry.RegistryFeature;
@@ -15,9 +16,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+@Getter
 public class ConfigManager extends RegistryFeature<AbstractConfig>
 {
     private Path saveDirectory;
+    private Path presetDirectory;
 
     public ConfigManager()
     {
@@ -29,6 +32,7 @@ public class ConfigManager extends RegistryFeature<AbstractConfig>
         {
             File homeDir = new File(System.getProperty("user.home"));
             saveDirectory = homeDir.toPath();
+            presetDirectory = saveDirectory.resolve("presets");
         }
         catch (Exception e)
         {
