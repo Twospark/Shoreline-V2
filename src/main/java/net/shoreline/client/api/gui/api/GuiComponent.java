@@ -144,6 +144,24 @@ public interface GuiComponent
                 color);
     }
 
+    default void drawPaddedString(GuiGraphicsExtractor graphics,
+                                  GuiComponent component,
+                                  String value,
+                                  float x,
+                                  float y,
+                                  boolean primaryColor)
+    {
+        float extra = 0.f;
+        if (component instanceof AbstractComponent ac)
+        {
+            extra  = (float) ac.getHoverAnimation().getCurrent();
+            extra -= (float) ac.getScrollAnimation().getCurrent();
+        }
+
+        float tX = x + getTextPadding() + extra;
+        drawString(graphics, value, tX, y, primaryColor, false);
+    }
+
     default void drawRightSettingText(GuiGraphicsExtractor graphics,
                                       GuiComponent component,
                                       String value,

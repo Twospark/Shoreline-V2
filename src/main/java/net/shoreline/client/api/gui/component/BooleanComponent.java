@@ -55,7 +55,7 @@ public class BooleanComponent extends AbstractComponent implements Interactable
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button)
     {
-        if (isHovered(mouseX, mouseY))
+        if (isHovered(mouseX, mouseY) && button == 0)
         {
             setting.setValue(!setting.getValue());
             colorAnimation.setState(setting.getValue());

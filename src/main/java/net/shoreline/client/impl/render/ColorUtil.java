@@ -16,6 +16,17 @@ public class ColorUtil
                 (int) (start.getAlpha() + (end.getAlpha() - start.getAlpha()) * factor));
     }
 
+    public int interpolate(int start, int end, double factor)
+    {
+        float[] s = getRGBValues(start);
+        float[] e = getRGBValues(end);
+        return new Color(
+                (int) (s[0] * factor + e[0] * (1.0f - factor)),
+                (int) (s[1] * factor + e[1] * (1.0f - factor)),
+                (int) (s[2] * factor + e[2] * (1.0f - factor)),
+                (int) (s[3] * factor + e[3] * (1.0f - factor))).getRGB();
+    }
+
     public Color withTransparency(Color color, int alpha)
     {
         return new Color(color.getRed(),
@@ -51,5 +62,15 @@ public class ColorUtil
     {
         float speed = 2500 / speedFactor;
         return ((System.currentTimeMillis() + offset) % (int) speed) / speed;
+    }
+
+    public float[] getRGBValues(int color)
+    {
+        Color c = new Color(color, (color >>> 24) != 0);
+        float r = c.getRed() / 255.0f;
+        float g = c.getGreen() / 255.0f;
+        float b = c.getBlue() / 255.0f;
+        float a = c.getAlpha() / 255.0f;
+        return new float[] { r, g, b, a };
     }
 }

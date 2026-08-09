@@ -48,7 +48,7 @@ public class MixinLevelRenderer
         matrices.mulPose(Axis.YP.rotationDegrees(minecraft.gameRenderer.getMainCamera().yRot() + 180f));
 
         ClientRenderer renderer = new ClientRenderer(minecraft.renderBuffers().bufferSource(), matrices.last());
-        RenderWorldEvent event = new RenderWorldEvent(renderer);
+        RenderWorldEvent event = new RenderWorldEvent(renderer, deltaTracker.getGameTimeDeltaPartialTick(false));
         EventBus.getInstance().post(event);
         renderer.flush();
 

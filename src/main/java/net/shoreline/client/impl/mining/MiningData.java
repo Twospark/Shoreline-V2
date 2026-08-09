@@ -1,6 +1,5 @@
 package net.shoreline.client.impl.mining;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,10 +8,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.shoreline.client.impl.network.NetworkHandler;
+import net.shoreline.client.impl.render.BoxRender;
+import net.shoreline.client.impl.render.ClientRenderer;
+import net.shoreline.client.impl.render.ColorUtil;
+import net.shoreline.client.impl.render.animation.Easing;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
@@ -65,6 +73,51 @@ public class MiningData
     public void resetTicksMining()
     {
         ticksMining = 0;
+    }
+
+    public void render(ClientRenderer renderer,
+                       float partialTicks,
+                       BoxRender boxRender,
+                       int startColor,
+                       int endColor,
+                       float alpha)
+    {
+        render(renderer, partialTicks, boxRender, startColor, endColor, alpha, maxProgress);
+    }
+
+    public void render(ClientRenderer renderer,
+                       float partialTicks,
+                       BoxRender boxRender,
+                       int startColor,
+                       int endColor,
+                       float alpha,
+                       float miningSpeed)
+    {
+        final BlockState state = getBlockState();
+
+        VoxelShape outlineShape = state.getShape(Minecraft.getInstance().level, blockPos);
+        AABB boundingBox = outlineShape != null && !outlineShape.isEmpty() ? outlineShape.bounds() : Shapes.block().bounds();
+        double scale = isDoneMining() ? 1.0 : Easing.SMOOTH.ease(getLinearScale(miningSpeed, partialTicks));
+
+        int color = ColorUtil.interpolate(endColor, startColor, Math.min(blockDamage / miningSpeed, 1.0f));
+        Vec3 center = boundingBox.move(blockPos).getCenter();
+
+        double dx = (boundingBox.maxX - boundingBox.minX) * scale;
+        double dy = (boundingBox.maxY - boundingBox.minY) * scale;
+        double dz = (boundingBox.maxZ - boundingBox.minZ) * scale;
+        AABB scaled = AABB.ofSize(center, dx, dy, dz);
+
+        boxRender.render(renderer, scaled, color, alpha);
+    }
+
+    private float getLinearScale(float maxProgress, float partialTicks)
+    {
+        return Mth.clamp((blockDamage + (blockDamage - lastDamage) * partialTicks) / (float) Math.max(0.001, maxProgress), 0.0f, 1.0f);
+    }
+
+    public float getProgress()
+    {
+        return Mth.clamp(blockDamage / (float) Math.max(0.001, maxProgress), 0.0f, 1.0f);
     }
 
     public double getSquaredDistanceTo()

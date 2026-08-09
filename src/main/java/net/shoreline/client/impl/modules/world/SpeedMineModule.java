@@ -16,6 +16,7 @@ import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.LevelEvent;
 import net.shoreline.client.impl.event.TickEvent;
 import net.shoreline.client.impl.event.network.AttackBlockEvent;
+import net.shoreline.client.impl.event.render.RenderWorldEvent;
 import net.shoreline.client.impl.inventory.ItemSlot;
 import net.shoreline.client.impl.inventory.SilentSwapType;
 import net.shoreline.client.impl.mining.MiningData;
@@ -24,6 +25,7 @@ import net.shoreline.client.impl.mining.MiningUtil;
 import net.shoreline.client.impl.modules.combat.AutoMineModule;
 import net.shoreline.client.impl.render.BoxRender;
 import net.shoreline.client.impl.render.animation.Animation;
+import net.shoreline.client.impl.render.animation.Easing;
 import net.shoreline.client.util.entity.PlayerUtil;
 import net.shoreline.eventbus.api.Subscribe;
 
@@ -172,6 +174,43 @@ public class SpeedMineModule extends Toggleable
         isManualMining = true;
         startMining(event.getPos(), event.getDirection());
         mc.player.swing(InteractionHand.MAIN_HAND, false);
+    }
+
+    @Subscribe
+    public void onRenderWorld(RenderWorldEvent event)
+    {
+        if (mainState != null)
+        {
+            if (mainState.getAnimation().getFactor() < 0.01f)
+            {
+                mainState = null;
+                return;
+            }
+
+            mainState.data.render(event.getRenderer(),
+                    event.getPartialTicks(),
+                    boxMode.getValue(),
+                    miningColor.getValue().getRGB(),
+                    breakingColor.getValue().getRGB(),
+                    (float) Easing.SMOOTH.ease(mainState.getAnimation().getFactor()),
+                    speedConfig.getValue());
+        }
+
+        if (packetState != null)
+        {
+            if (packetState.getAnimation().getFactor() < 0.01f)
+            {
+                packetState = null;
+                return;
+            }
+
+            packetState.data.render(event.getRenderer(),
+                    event.getPartialTicks(),
+                    boxMode.getValue(),
+                    miningColor.getValue().getRGB(),
+                    breakingColor.getValue().getRGB(),
+                    (float) Easing.SMOOTH.ease(packetState.getAnimation().getFactor()), 1.0f);
+        }
     }
 
     public void startMining(BlockPos blockPos, Direction direction)

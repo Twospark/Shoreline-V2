@@ -14,13 +14,11 @@ import net.shoreline.client.impl.modules.client.*;
 import net.shoreline.client.impl.modules.combat.*;
 import net.shoreline.client.impl.modules.hud.ModulesElement;
 import net.shoreline.client.impl.modules.hud.WatermarkElement;
-import net.shoreline.client.impl.modules.misc.FakePlayerModule;
+import net.shoreline.client.impl.modules.misc.*;
 import net.shoreline.client.impl.modules.movement.SprintModule;
 import net.shoreline.client.impl.modules.movement.VelocityModule;
 import net.shoreline.client.impl.modules.render.BlockHighlightModule;
-import net.shoreline.client.impl.modules.world.AirPlaceModule;
-import net.shoreline.client.impl.modules.world.AutoToolModule;
-import net.shoreline.client.impl.modules.world.SpeedMineModule;
+import net.shoreline.client.impl.modules.world.*;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
 
@@ -56,7 +54,13 @@ public class ModuleManager extends RegistryFeature<Module>
                 new FeetTrapModule(),
                 new OffhandGappleModule(),
 
+                new AntiAimModule(),
+                new AutoFishModule(),
+                new AutoReconnectModule(),
+                new AutoRespawnModule(),
                 new FakePlayerModule(),
+                new PacketSnifferModule(),
+                new SpammerModule(),
 
                 new SprintModule(),
                 new VelocityModule(),
@@ -65,7 +69,11 @@ public class ModuleManager extends RegistryFeature<Module>
 
                 new AirPlaceModule(),
                 new AutoToolModule(),
+                new FastPlaceModule(),
+                new NukerModule(),
+                new ScaffoldModule(),
                 new SpeedMineModule(),
+                new TimerModule(),
 
                 new ModulesElement(),
                 new WatermarkElement()

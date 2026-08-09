@@ -8,16 +8,16 @@ import net.shoreline.client.api.gui.handler.ScrollHandler;
 import net.shoreline.client.api.gui.handler.SearchHandler;
 import net.shoreline.client.impl.render.Render2DUtil;
 
-public class WindowComponent extends ParentComponent
+public class WindowComponent extends GridParentComponent
 {
     protected final float padding = 50;
     protected final SearchHandler search;
     protected final ScrollHandler scroll;
     protected DragHandler dragHandler;
 
-    public WindowComponent(String label, SearchHandler searchHandler)
+    public WindowComponent(String label, SearchHandler searchHandler, int columns)
     {
-        super(label, () -> true);
+        super(label, () -> true, columns);
         setWidth(110);
         setOpen(true);
 

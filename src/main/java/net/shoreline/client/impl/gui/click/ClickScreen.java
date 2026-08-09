@@ -25,7 +25,7 @@ public class ClickScreen extends ShorelineGui
             }
 
             String formatted = Formatter.capitalize(category.name().toLowerCase());
-            WindowComponent component = new WindowComponent(formatted, searchHandler);
+            WindowComponent component = new WindowComponent(formatted, searchHandler, 1);
             for (Module module : Managers.MODULES.getModules(
                     module -> module.getCategory() == category))
             {

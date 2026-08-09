@@ -18,6 +18,9 @@ public abstract class ShorelineGui extends Screen
     protected final List<GuiComponent> components = new ArrayList<>();
     protected final SearchHandler searchHandler = new SearchHandler();
 
+    public static boolean cancelEscape;
+    public static boolean cancelSearch;
+
     public ShorelineGui(String type)
     {
         super(Component.literal("Shoreline-" + type));
@@ -103,6 +106,12 @@ public abstract class ShorelineGui extends Screen
             }
         }
 
+        if (!searchHandler.isSearching() && cancelSearch)
+        {
+            cancelSearch = false;
+            return super.keyPressed(event);
+        }
+
         searchHandler.onKey(key, scancode, modifiers);
         return super.keyPressed(event);
     }
@@ -117,6 +126,12 @@ public abstract class ShorelineGui extends Screen
             {
                 interactable.charTyped(chr);
             }
+        }
+
+        if (!searchHandler.isSearching() && cancelSearch)
+        {
+            cancelSearch = false;
+            return true;
         }
 
         searchHandler.onChar(chr);

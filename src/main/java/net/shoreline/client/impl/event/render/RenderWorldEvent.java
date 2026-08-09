@@ -9,4 +9,5 @@ import net.shoreline.client.impl.render.ClientRenderer;
 public class RenderWorldEvent
 {
     private final ClientRenderer renderer;
+    private final float partialTicks;
 }

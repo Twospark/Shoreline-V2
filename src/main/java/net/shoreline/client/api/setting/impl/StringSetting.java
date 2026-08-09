@@ -3,6 +3,7 @@ package net.shoreline.client.api.setting.impl;
 import com.google.gson.JsonElement;
 import lombok.Setter;
 import net.shoreline.client.api.gui.api.GuiComponent;
+import net.shoreline.client.api.gui.component.StringComponent;
 import net.shoreline.client.api.setting.Setting;
 import net.shoreline.client.api.setting.SettingBuilder;
 
@@ -66,7 +67,7 @@ public class StringSetting extends Setting<String>
     @Override
     public GuiComponent getComponent()
     {
-        return null;
+        return new StringComponent(getName(), getVisible(), this::getValue, this::setValue);
     }
 
     public static class Builder extends SettingBuilder<String>

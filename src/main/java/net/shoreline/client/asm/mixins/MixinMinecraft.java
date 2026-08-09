@@ -13,6 +13,7 @@ import net.shoreline.client.impl.event.TickEvent;
 import net.shoreline.client.impl.event.render.ScreenEvent;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,6 +25,15 @@ public abstract class MixinMinecraft implements IMinecraft
     @Override
     @Invoker(value = "startUseItem")
     public abstract void shoreline$startUseItem();
+
+
+    @Override
+    @Accessor(value = "rightClickDelay")
+    public abstract int shoreline$getRightClickDelay();
+
+    @Override
+    @Accessor(value = "rightClickDelay")
+    public abstract void shoreline$setRightClickDelay(int delay);
 
     @Inject(
             method = "<init>",

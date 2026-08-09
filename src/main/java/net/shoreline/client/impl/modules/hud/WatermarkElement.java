@@ -39,6 +39,6 @@ public class WatermarkElement extends Element
 
     public String getWatermark()
     {
-        return "Shoreline" + (version.getValue() ? ChatFormatting.WHITE + " v" + ShorelineMod.getSimpleVersion() : "");
+        return ShorelineMod.MOD_NAME + (version.getValue() ? ChatFormatting.WHITE + " v" + ShorelineMod.getSimpleVersion() : "");
     }
 }

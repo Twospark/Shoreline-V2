@@ -33,4 +33,9 @@ public class NetworkHandler extends Feature
     {
         Managers.NETWORK.sendSequenced(predictiveAction);
     }
+
+    public boolean wasSentFromClient(Packet<?> packet)
+    {
+        return Managers.NETWORK.wasSentFromClient(packet);
+    }
 }

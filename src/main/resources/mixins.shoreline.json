@@ -24,6 +24,8 @@
     "input.MixinKeyboardInput",
     "level.MixinBlockCollisions",
     "level.MixinClientLevel",
+    "render.MixinDeltaTrackerTimer",
+    "render.MixinGameRenderer",
     "render.MixinLevelRenderer",
     "render.entity.MixinEntityRenderDispatcher",
     "render.entity.MixinLivingEntityRenderer"

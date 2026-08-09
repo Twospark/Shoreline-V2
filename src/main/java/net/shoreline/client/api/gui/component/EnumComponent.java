@@ -1,6 +1,8 @@
 package net.shoreline.client.api.gui.component;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.shoreline.client.api.gui.api.GuiComponent;
+import net.shoreline.client.api.gui.api.Interactable;
 import net.shoreline.client.api.setting.impl.EnumSetting;
 import net.shoreline.client.impl.render.ColorUtil;
 import net.shoreline.client.impl.render.Render2DUtil;
@@ -41,8 +43,7 @@ public class EnumComponent<E extends Enum<E>> extends ParentComponent
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button)
     {
-        super.mouseClicked(mouseX, mouseY, button);
-        if (isHovered(mouseX, mouseY))
+        if (mouseWithinBounds(mouseX, mouseY, getAlignedX(), getY(), getWidth(), getFeatureHeight()))
         {
             int ordinal = setting.getValue().ordinal();
             E[] values = setting.getValue().getDeclaringClass().getEnumConstants();
@@ -55,6 +56,21 @@ public class EnumComponent<E extends Enum<E>> extends ParentComponent
             {
                 ordinal = (ordinal - 1 + values.length) % values.length;
                 setting.setValue(values[ordinal]);
+            }
+            else if (button == 2)
+            {
+                setOpen(!open);
+            }
+        }
+
+        if (open)
+        {
+            for (GuiComponent component : components)
+            {
+                if (component instanceof Interactable interactable && component.isVisible())
+                {
+                    interactable.mouseClicked(mouseX, mouseY, button);
+                }
             }
         }
     }
@@ -98,7 +114,7 @@ public class EnumComponent<E extends Enum<E>> extends ParentComponent
                     eFactor
             );
 
-            Render2DUtil.drawRect(graphics, getX(), getY() + 1.5f, getX() + getWidth(), getY() + 13f, color.getRGB());
+            Render2DUtil.drawRect(graphics, getX(), getY() + 1.5f, getX() + getWidth(), getY() + getFeatureHeight(), color.getRGB());
             drawString(graphics, Formatter.formatEnum(e), (float) (getX() + getTextPadding() + getHoverAnimation().getCurrent()), getY() + (getFeatureHeight()) / 2 + 1.0f, 0xFFFFFFFF);
         }
 

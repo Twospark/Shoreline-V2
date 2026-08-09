@@ -53,31 +53,7 @@ public class ParentComponent extends AbstractComponent implements Interactable, 
         animation.setEasing(open ? Easing.CUBIC_OUT : Easing.CUBIC_IN);
         if (animation.getFactor() > 0.001)
         {
-            for (GuiComponent component : components)
-            {
-                AbstractComponent ac = (AbstractComponent) component;
-                if (!checkComponent(ac))
-                {
-                    continue;
-                }
-
-                float padding = 0.0f;
-                if (modifyParentPadding() && component instanceof ParentComponent)
-                {
-                    padding += getBorder();
-                }
-
-                component.setX(getX() + getBorder());
-                component.setAlignedX(getX() + (modifyParentPadding() ? 0 : getBorder()));
-                component.setWidth(getWidth() - getRightPadding() - padding);
-                component.setY(getY() + getYModifier() + getActualHeight());
-                component.render(graphics, mouseX, mouseY, partialTicks);
-                setActualHeight(getActualHeight() + component.getHeight());
-                setHeight((float) (getHeight() + (component.getHeight() * animation.getCurrent())));
-            }
-
-            setHeight((float) (getHeight() + (getPadding() * animation.getFactor())));
-            setActualHeight(getActualHeight() + getPadding());
+            renderComponents(graphics, mouseX, mouseY, partialTicks);
         }
 
         graphics.disableScissor();
@@ -163,6 +139,35 @@ public class ParentComponent extends AbstractComponent implements Interactable, 
         }
     }
 
+    public void renderComponents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
+    {
+        for (GuiComponent component : components)
+        {
+            AbstractComponent ac = (AbstractComponent) component;
+            if (!checkComponent(ac))
+            {
+                continue;
+            }
+
+            float padding = 0.0f;
+            if (modifyParentPadding() && component instanceof ParentComponent)
+            {
+                padding += getBorder();
+            }
+
+            component.setX(getX() + getBorder());
+            component.setAlignedX(getX() + (modifyParentPadding() ? 0 : getBorder()));
+            component.setWidth(getWidth() - getRightPadding() - padding);
+            component.setY(getY() + getYModifier() + getActualHeight());
+            component.render(graphics, mouseX, mouseY, partialTicks);
+            setActualHeight(getActualHeight() + component.getHeight());
+            setHeight((float) (getHeight() + (component.getHeight() * animation.getCurrent())));
+        }
+
+        setHeight((float) (getHeight() + (getPadding() * animation.getFactor())));
+        setActualHeight(getActualHeight() + getPadding());
+    }
+
     public void scissor(GuiGraphicsExtractor graphics)
     {
         graphics.enableScissor(
@@ -191,7 +196,7 @@ public class ParentComponent extends AbstractComponent implements Interactable, 
     {
         float outlineY = getY() + getFeatureHeight();
         float outlineHeight = getHeight() - getFeatureHeight() + 0.5f;
-        Render2DUtil.drawRect(graphics, getX(), outlineY, getX() + 1.0f, outlineY + outlineHeight, getTheme().getPrimary());
+        Render2DUtil.drawRect(graphics, getX(), outlineY, getX() + 1.0f, outlineY + outlineHeight, getTheme().getPrimary(0.5f));
     }
 
     public boolean checkComponent(AbstractComponent component)

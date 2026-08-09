@@ -32,11 +32,6 @@ public class NetworkManager extends Feature
         super("Network");
     }
 
-    public void registerHandler(NetworkHandler h)
-    {
-        handlers.add(h);
-    }
-
     public void send(NetworkHandler handler, Packet<?> packet)
     {
         applyIfPresent(packetListener ->
@@ -97,6 +92,21 @@ public class NetworkManager extends Feature
         {
             consumer.accept(listener);
         }
+    }
+
+    public void registerHandler(NetworkHandler h)
+    {
+        handlers.add(h);
+    }
+
+    public long getPacketsSent(NetworkHandler handler)
+    {
+        return sentCount.getOrDefault(handler, new LongAdder()).longValue();
+    }
+
+    public boolean wasSentFromClient(Packet<?> packet)
+    {
+        return sentFromClient.containsKey(packet);
     }
 
     private record SentPacketData(NetworkHandler handler, Long timestamp) {}

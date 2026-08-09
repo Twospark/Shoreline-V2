@@ -24,14 +24,19 @@ public class PacketSnifferModule extends Toggleable
             .setDefaultValue(false).build();
 
     Setting<Boolean> cPacketMovePlayerPosRot = new BooleanSetting.Builder("CPacketMovePlayerPosRot")
+            .setDefaultValue(false)
             .setDescription("Logs CPacketMovePlayerPacket.PosRot").setDefaultValue(false).build();
     Setting<Boolean> cPacketMovePlayerPos = new BooleanSetting.Builder("CPacketMovePlayerPos")
+            .setDefaultValue(false)
             .setDescription("Logs CPacketMovePlayerPacket.Pos").setDefaultValue(false).build();
     Setting<Boolean> cPacketMovePlayerRot = new BooleanSetting.Builder("CPacketMovePlayerRot")
+            .setDefaultValue(false)
             .setDescription("Logs CPacketMovePlayerPacket.Rot").setDefaultValue(false).build();
     Setting<Boolean> cPacketMovePlayerStatus = new BooleanSetting.Builder("CPacketMovePlayerStatus")
+            .setDefaultValue(false)
             .setDescription("Logs CPacketMovePlayerPacket.StatusOnly").setDefaultValue(false).build();
     Setting<Boolean> cPacketMoveVehicle = new BooleanSetting.Builder("CPacketMoveVehicle")
+            .setDefaultValue(false)
             .setDescription("Logs CPacketMoveVehicle").build();
     Setting<Void> clientPackets = new SettingGroup.Builder("Client")
             .addAll(cPacketMovePlayerPosRot, cPacketMovePlayerPos, cPacketMovePlayerRot, cPacketMovePlayerStatus,

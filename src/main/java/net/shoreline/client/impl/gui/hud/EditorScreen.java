@@ -24,7 +24,7 @@ public class EditorScreen extends ShorelineGui implements Globals
     @Override
     public void load()
     {
-        WindowComponent component = new WindowComponent("Elements", searchHandler);
+        WindowComponent component = new WindowComponent("Elements", searchHandler, 1);
         for (Element element : Managers.MODULES.getElements())
         {
             GuiComponent eComponent = element.getComponent();

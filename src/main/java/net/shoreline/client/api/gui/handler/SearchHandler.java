@@ -22,7 +22,7 @@ public class SearchHandler implements Globals
 
     public String getSearch()
     {
-        return textHandler.getText();
+        return textHandler.getText() != null ? textHandler.getText() : "";
     }
 
     public void render(GuiGraphicsExtractor graphics, float partialTicks)
