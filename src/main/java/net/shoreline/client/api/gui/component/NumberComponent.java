@@ -16,26 +16,27 @@ public class NumberComponent extends AbstractComponent implements Interactable
 {
     private final TextHandler textHandler = new TextHandler();
     private final Smoother filter = new Smoother();
-    private final NumberHandler numberHandler;
+    private final NumberHandler<?> numberHandler;
     private boolean dragging;
     private boolean listening;
     private String format = "";
 
-    public NumberComponent(NumberHandler handler)
+    public NumberComponent(NumberHandler<?> handler)
     {
         this("Component", () -> true, handler);
     }
 
-    public NumberComponent(String label, Supplier<Boolean> visibility, NumberHandler handler)
+    public NumberComponent(String label, Supplier<Boolean> visibility, NumberHandler<?> handler)
     {
         super(label, visibility);
         this.numberHandler = handler;
     }
 
-    public NumberComponent(String label, Supplier<Boolean> visibility, NumberHandler handler, String format)
+    public NumberComponent(String label, Supplier<Boolean> visibility, NumberHandler<?> handler, String format)
     {
         super(label, visibility);
         this.numberHandler = handler;
+        this.format = format;
     }
 
     public void drawSlider(GuiGraphicsExtractor graphics, String text, float fill, float partialTicks)

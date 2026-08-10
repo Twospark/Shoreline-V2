@@ -31,18 +31,18 @@ public class SearchHandler implements Globals
         float scaledHeight = mc.getWindow().getGuiScaledHeight();
 
         String label = searching ? "Esc to stop Searching" : "Ctrl + F to Search";
-        Managers.TEXT.drawVanillaString(graphics, label, scaledWidth - Managers.TEXT.getWidth(label), scaledHeight - Managers.TEXT.getHeight(), ColorUtil.getSimpleVariation(0, Color.WHITE));
+        Managers.TEXT.drawString(graphics, label, scaledWidth - Managers.TEXT.getWidth(label), scaledHeight - Managers.TEXT.getHeight(), ColorUtil.getSimpleVariation(0, Color.WHITE));
 
         if (searching)
         {
             if (completion != null)
             {
                 String full = getSearch() + ChatFormatting.GRAY + completion.substring(getSearch().length());
-                Managers.TEXT.drawVanillaString(graphics, full + textHandler.getIdleSign(), scaledWidth / 2f - Managers.TEXT.getWidth(full) / 2f, scaledHeight - (Managers.TEXT.getHeight() * 10), 0xFFFFFFFF);
+                Managers.TEXT.drawString(graphics, full + textHandler.getIdleSign(), scaledWidth / 2f - Managers.TEXT.getWidth(full) / 2f, scaledHeight - (Managers.TEXT.getHeight() * 10), 0xFFFFFFFF);
             }
             else
             {
-                Managers.TEXT.drawVanillaString(graphics, textHandler.getIdlingText(), scaledWidth / 2f - Managers.TEXT.getWidth(getSearch()) / 2f, scaledHeight - (Managers.TEXT.getHeight() * 10), 0xFFFFFFFF);
+                Managers.TEXT.drawString(graphics, textHandler.getIdlingText(), scaledWidth / 2f - Managers.TEXT.getWidth(getSearch()) / 2f, scaledHeight - (Managers.TEXT.getHeight() * 10), 0xFFFFFFFF);
             }
         }
         else

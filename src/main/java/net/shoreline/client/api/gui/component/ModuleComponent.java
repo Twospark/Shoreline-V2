@@ -10,14 +10,14 @@ import net.shoreline.client.impl.render.animation.Easing;
 
 import java.awt.*;
 
-public class ModuleComponent extends ParentComponent
+public class ModuleComponent extends GridParentComponent
 {
     private final Module module;
     private final ColorAnimation colorAnimation;
 
     public ModuleComponent(Module module)
     {
-        super(module.getName(), () -> true);
+        super(module.getName(), () -> true, 1);
         this.module = module;
         this.colorAnimation = new ColorAnimation(150, Easing.LINEAR);
 
@@ -91,6 +91,6 @@ public class ModuleComponent extends ParentComponent
     @Override
     public float getRightPadding()
     {
-        return 3f;
+        return 1f;
     }
 }

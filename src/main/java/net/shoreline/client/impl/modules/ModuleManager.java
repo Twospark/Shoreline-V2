@@ -18,6 +18,7 @@ import net.shoreline.client.impl.modules.misc.*;
 import net.shoreline.client.impl.modules.movement.SprintModule;
 import net.shoreline.client.impl.modules.movement.VelocityModule;
 import net.shoreline.client.impl.modules.render.BlockHighlightModule;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import net.shoreline.client.impl.modules.world.*;
 import net.shoreline.eventbus.EventBus;
 import net.shoreline.eventbus.api.Subscribe;
@@ -39,6 +40,7 @@ public class ModuleManager extends RegistryFeature<Module>
 
         register(
                 new ClickGuiModule(),
+                new FontModule(),
                 new HudModule(),
                 new InteractionsModule(),
                 new InventoryModule(),
@@ -66,6 +68,7 @@ public class ModuleManager extends RegistryFeature<Module>
                 new VelocityModule(),
 
                 new BlockHighlightModule(),
+                new NoRenderModule(),
 
                 new AirPlaceModule(),
                 new AutoToolModule(),

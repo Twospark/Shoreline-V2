@@ -129,7 +129,7 @@ public abstract class Element extends Toggleable
 
     public void drawText(GuiGraphicsExtractor graphics, String text, float x, float y)
     {
-        Managers.TEXT.drawVanillaString(graphics, text, x, y, ThemeModule.INSTANCE.getPrimary());
+        Managers.TEXT.drawString(graphics, text, x, y, ThemeModule.INSTANCE.getPrimary());
     }
 
     public void updateAnchor()

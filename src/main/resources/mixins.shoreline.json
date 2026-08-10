@@ -27,6 +27,7 @@
     "render.MixinDeltaTrackerTimer",
     "render.MixinGameRenderer",
     "render.MixinLevelRenderer",
+    "render.MixinNativeImage",
     "render.entity.MixinEntityRenderDispatcher",
     "render.entity.MixinLivingEntityRenderer"
   ],

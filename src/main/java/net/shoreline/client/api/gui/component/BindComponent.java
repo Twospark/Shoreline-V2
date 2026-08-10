@@ -1,6 +1,7 @@
 package net.shoreline.client.api.gui.component;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.shoreline.client.api.gui.ShorelineGui;
 import net.shoreline.client.api.gui.api.Interactable;
 import net.shoreline.client.api.setting.impl.BindSetting;
 import net.shoreline.client.api.setting.util.Bind;
@@ -80,7 +81,10 @@ public class BindComponent extends AbstractComponent implements Interactable
         {
             case GLFW.GLFW_KEY_DELETE:
             case GLFW.GLFW_KEY_BACKSPACE:
+                setting.setValue(Bind.none());
+                break;
             case GLFW.GLFW_KEY_ESCAPE:
+                ShorelineGui.cancelEscape = true;
                 setting.setValue(Bind.none());
                 break;
             default:

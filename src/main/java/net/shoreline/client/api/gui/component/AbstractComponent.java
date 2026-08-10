@@ -24,6 +24,7 @@ public abstract class AbstractComponent implements GuiComponent, Globals
     protected float x, y, width, height, alignedX;
     protected final Animation scrollAnimation;
     protected final Animation hoverAnimation;
+    protected final Animation closeAnimation;
     protected final Smoother textSmoother;
     protected boolean scrollState;
 
@@ -33,7 +34,9 @@ public abstract class AbstractComponent implements GuiComponent, Globals
         this.visibility = visibility;
         this.hoverAnimation = new Animation(150, Easing.SMOOTH);
         this.scrollAnimation = new Animation(false, 0, 0, 1000, Easing.LINEAR);
+        this.closeAnimation = new Animation(150, Easing.LINEAR);
         this.textSmoother = new Smoother();
+        this.closeAnimation.setStateHard(isVisible());
     }
 
     /**
@@ -80,6 +83,12 @@ public abstract class AbstractComponent implements GuiComponent, Globals
     }
 
     @Override
+    public float getHeight()
+    {
+        return (float) (height * closeAnimation.getFactor());
+    }
+
+    @Override
     public void setScroll(double scroll)
     {
         scrollAnimation.setTarget(scroll);
@@ -120,7 +129,7 @@ public abstract class AbstractComponent implements GuiComponent, Globals
 
     public void drawAnimatedRightText(GuiGraphicsExtractor graphics, String text, boolean primaryColor, float partialTicks)
     {
-        drawRightSettingText(graphics, this, text, primaryColor, (float) textSmoother.smooth(Managers.TEXT.getWidth(text), 0.5f, partialTicks));
+        drawRightSettingText(graphics, text, primaryColor, (float) textSmoother.smooth(Managers.TEXT.getWidth(text), 0.5f, partialTicks));
     }
 
     public boolean shouldRenderComponent()

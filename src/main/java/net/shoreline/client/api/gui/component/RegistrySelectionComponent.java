@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+//TODO: the visibility animations for this is pretty funky.
 @SuppressWarnings("unchecked")
 public class RegistrySelectionComponent<T> extends GridParentComponent
 {

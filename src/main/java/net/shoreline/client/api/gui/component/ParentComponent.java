@@ -143,25 +143,28 @@ public class ParentComponent extends AbstractComponent implements Interactable, 
     {
         for (GuiComponent component : components)
         {
-            AbstractComponent ac = (AbstractComponent) component;
-            if (!checkComponent(ac))
-            {
-                continue;
-            }
-
             float padding = 0.0f;
             if (modifyParentPadding() && component instanceof ParentComponent)
             {
                 padding += getBorder();
             }
 
-            component.setX(getX() + getBorder());
-            component.setAlignedX(getX() + (modifyParentPadding() ? 0 : getBorder()));
-            component.setWidth(getWidth() - getRightPadding() - padding);
-            component.setY(getY() + getYModifier() + getActualHeight());
-            component.render(graphics, mouseX, mouseY, partialTicks);
-            setActualHeight(getActualHeight() + component.getHeight());
-            setHeight((float) (getHeight() + (component.getHeight() * animation.getCurrent())));
+            AbstractComponent ac = (AbstractComponent) component;
+            ac.getCloseAnimation().setState(component.isVisible());
+
+            graphics.enableScissor((int) (component.getX() - 0.5f), (int) (component.getY() - 0.5f), (int) (component.getX() + component.getWidth() + 0.5f), (int) (component.getY() + component.getHeight() + 1f));
+            if (checkComponent(ac))
+            {
+                component.setX(getX() + getBorder());
+                component.setAlignedX(getX() + (modifyParentPadding() ? 0 : getBorder()));
+                component.setWidth(getWidth() - getRightPadding() - padding);
+                component.setY(getY() + getYModifier() + getActualHeight());
+                component.render(graphics, mouseX, mouseY, partialTicks);
+                setActualHeight(getActualHeight() + component.getHeight());
+                setHeight((float) (getHeight() + (component.getHeight() * animation.getCurrent())));
+            }
+
+            graphics.disableScissor();
         }
 
         setHeight((float) (getHeight() + (getPadding() * animation.getFactor())));
@@ -201,6 +204,6 @@ public class ParentComponent extends AbstractComponent implements Interactable, 
 
     public boolean checkComponent(AbstractComponent component)
     {
-        return component.isVisible();
+        return component.getCloseAnimation().getFactor() > 0.001;
     }
 }

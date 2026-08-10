@@ -2,6 +2,7 @@ package net.shoreline.client.api.gui.component;
 
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.shoreline.client.api.gui.ShorelineGui;
 import net.shoreline.client.api.gui.api.Interactable;
 import net.shoreline.client.api.gui.handler.TextHandler;
 import org.lwjgl.glfw.GLFW;
@@ -23,6 +24,7 @@ public class StringComponent extends AbstractComponent implements Interactable
         super(label, visibility);
         this.supplier = supplier;
         this.consumer = consumer;
+        handler.setText(supplier.get());
     }
 
     @Override
@@ -66,6 +68,7 @@ public class StringComponent extends AbstractComponent implements Interactable
 
         if (key == GLFW.GLFW_KEY_ESCAPE || key == GLFW.GLFW_KEY_ENTER)
         {
+            ShorelineGui.cancelEscape = true;
             consumer.accept(handler.getText());
             typing = false;
         }

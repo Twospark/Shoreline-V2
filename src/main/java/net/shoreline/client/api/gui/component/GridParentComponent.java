@@ -26,6 +26,7 @@ public class GridParentComponent extends ParentComponent
         for (GuiComponent component : components)
         {
             AbstractComponent ac = (AbstractComponent) component;
+            ac.getCloseAnimation().setState(component.isVisible());
             if (!checkComponent(ac))
             {
                 continue;

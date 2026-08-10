@@ -105,7 +105,7 @@ public interface GuiComponent
                 ? x - Managers.TEXT.getWidth(text)
                 : x;
 
-        Managers.TEXT.drawVanillaString(graphics,
+        Managers.TEXT.drawString(graphics,
                 text,
                 align,
                 y - (Managers.TEXT.getHeight() >> 1),
@@ -124,7 +124,7 @@ public interface GuiComponent
                 : 0xFFFFFFFF;
         float align = x - width;
 
-        Managers.TEXT.drawVanillaString(graphics,
+        Managers.TEXT.drawString(graphics,
                 text,
                 align,
                 y - (Managers.TEXT.getHeight() >> 1),
@@ -137,33 +137,14 @@ public interface GuiComponent
                             float y,
                             int color)
     {
-        Managers.TEXT.drawVanillaString(graphics,
+        Managers.TEXT.drawString(graphics,
                 text,
                 x,
                 y - (Managers.TEXT.getHeight() >> 1),
                 color);
     }
 
-    default void drawPaddedString(GuiGraphicsExtractor graphics,
-                                  GuiComponent component,
-                                  String value,
-                                  float x,
-                                  float y,
-                                  boolean primaryColor)
-    {
-        float extra = 0.f;
-        if (component instanceof AbstractComponent ac)
-        {
-            extra  = (float) ac.getHoverAnimation().getCurrent();
-            extra -= (float) ac.getScrollAnimation().getCurrent();
-        }
-
-        float tX = x + getTextPadding() + extra;
-        drawString(graphics, value, tX, y, primaryColor, false);
-    }
-
     default void drawRightSettingText(GuiGraphicsExtractor graphics,
-                                      GuiComponent component,
                                       String value,
                                       boolean primaryColor,
                                       float width)
@@ -173,9 +154,9 @@ public interface GuiComponent
             return;
         }
 
-        float align = component.getWidth() - getTextPadding();
-        float x = component.getAlignedX() + align;
-        float y = component.getY() + (getFeatureHeight()) / 2 + 1f;
+        float align = getWidth() - getTextPadding();
+        float x = getAlignedX() + align;
+        float y = getY() + (getFeatureHeight()) / 2 + 1f;
         drawRightString(graphics, value, x, y, primaryColor, width);
     }
 

@@ -123,6 +123,6 @@ public abstract class DynamicElement extends Element
     {
         int alpha = (int) Math.min(transparency * 255, 255);
         int c = ColorUtil.withTransparency(color, alpha).getRGB();
-        Managers.TEXT.drawVanillaString(graphics, text, x, y, c);
+        Managers.TEXT.drawString(graphics, text, x, y, c);
     }
 }
