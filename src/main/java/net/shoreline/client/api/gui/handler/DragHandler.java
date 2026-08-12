@@ -1,23 +1,24 @@
 package net.shoreline.client.api.gui.handler;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class DragHandler
 {
-    protected float x;
-    protected float y;
+    protected final Supplier<Float> xSupplier;
+    protected final Supplier<Float> ySupplier;
+    protected final Consumer<Float> xSetter;
+    protected final Consumer<Float> ySetter;
     protected float clickedX;
     protected float clickedY;
     protected boolean dragging;
-
-    public DragHandler(float x, float y)
-    {
-        this.x = x;
-        this.y = y;
-    }
 
     public void handleRender(float mouseX, float mouseY)
     {
@@ -25,8 +26,8 @@ public class DragHandler
         {
             float resultX = mouseX + clickedX;
             float resultY = mouseY + clickedY;
-            x = resultX;
-            y = resultY;
+            xSetter.accept(resultX);
+            ySetter.accept(resultY);
         }
     }
 
@@ -36,8 +37,8 @@ public class DragHandler
         if (hovered && button == 0)
         {
             dragging = true;
-            clickedX = x - mouseX;
-            clickedY = y - mouseY;
+            clickedX = xSupplier.get() - mouseX;
+            clickedY = ySupplier.get() - mouseY;
         }
     }
 }

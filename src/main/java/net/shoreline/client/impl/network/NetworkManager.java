@@ -1,6 +1,7 @@
 package net.shoreline.client.impl.network;
 
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.prediction.BlockStatePredictionHandler;
 import net.minecraft.client.multiplayer.prediction.PredictiveAction;
 import net.minecraft.network.protocol.Packet;
@@ -92,6 +93,21 @@ public class NetworkManager extends Feature
         {
             consumer.accept(listener);
         }
+    }
+
+    public int getClientLatency()
+    {
+        ClientPacketListener listener = mc.getConnection();
+        if (mc.level != null && listener != null)
+        {
+            PlayerInfo playerInfo = listener.getPlayerInfo(mc.player.getGameProfile().id());
+            if (playerInfo != null)
+            {
+                return playerInfo.getLatency();
+            }
+        }
+
+        return 0;
     }
 
     public void registerHandler(NetworkHandler h)

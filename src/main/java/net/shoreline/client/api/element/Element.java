@@ -41,7 +41,7 @@ public abstract class Element extends Toggleable
     public Element(String name, String[] nameAliases, String description, float x, float y)
     {
         super(name, nameAliases, description, Category.HUD);
-        drag = new DragHandler(x, y);
+        drag = new DragHandler(this::getX, this::getY, this::setX, this::setY);
         xPos.setValue(x);
         yPos.setValue(y);
         register(xPos, yPos, anchor, index);
@@ -58,8 +58,6 @@ public abstract class Element extends Toggleable
         drag.handleRender(mouseX, mouseY);
         if (drag.isDragging())
         {
-            setX(drag.getX());
-            setY(drag.getY());
             updateAnchor();
             checkHovered();
         }

@@ -69,4 +69,26 @@ public class MixinGui
             }
         }
     }
+
+    @Inject(method = "extractEffects", at = @At(value = "HEAD"), cancellable = true)
+    private void extractEffectsHook(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo info)
+    {
+        HudOverlayEvent.Potions event = new HudOverlayEvent.Potions();
+        EventBus.getInstance().post(event);
+        if (event.isCanceled())
+        {
+            info.cancel();
+        }
+    }
+
+    @Inject(method = "extractSelectedItemName", at = @At(value = "HEAD"), cancellable = true)
+    private void extractSelectedItemNameHook(GuiGraphicsExtractor graphics, CallbackInfo info)
+    {
+        HudOverlayEvent.ItemName event = new HudOverlayEvent.ItemName();
+        EventBus.getInstance().post(event);
+        if (event.isCanceled())
+        {
+            info.cancel();
+        }
+    }
 }

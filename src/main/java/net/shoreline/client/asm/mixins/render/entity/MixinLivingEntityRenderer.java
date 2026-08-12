@@ -6,12 +6,16 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.shoreline.client.api.interfaces.Globals;
 import net.shoreline.client.impl.Managers;
+import net.shoreline.client.impl.event.render.EntityHurtEvent;
 import net.shoreline.client.impl.modules.client.RotationsModule;
 import net.shoreline.client.impl.rotation.handler.RotationRenderer;
+import net.shoreline.eventbus.EventBus;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntityRenderer.class)
@@ -80,5 +84,22 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity,
             entity.yBodyRot  = bodyYaw;
             entity.yBodyRotO = prevBodyYaw;
         }
+    }
+
+    @Redirect(
+            method = "getOverlayCoords",
+            at = @At(value = "FIELD",
+                    target = "Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;hasRedOverlay:Z",
+                    opcode = Opcodes.GETFIELD))
+    private static boolean hurtHook(LivingEntityRenderState instance)
+    {
+        EntityHurtEvent event = new EntityHurtEvent();
+        EventBus.getInstance().post(event);
+        if (event.isCanceled())
+        {
+            return false;
+        }
+
+        return instance.hasRedOverlay;
     }
 }

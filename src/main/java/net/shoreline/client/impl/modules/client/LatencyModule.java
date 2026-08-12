@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class LatencyModule extends Toggleable
 {
+    public static LatencyModule INSTANCE;
+
     Setting<Latency> mode = new EnumSetting.Builder<Latency>("Mode")
             .setDescription("The mode to get the latency")
             .setDefaultValue(Latency.PING).build();
@@ -39,6 +41,7 @@ public class LatencyModule extends Toggleable
     public LatencyModule()
     {
         super("Latency", "Resolves the client latency", Category.CLIENT);
+        INSTANCE = this;
     }
 
     @Override

@@ -13,7 +13,7 @@ public class WindowComponent extends GridParentComponent
     protected final float padding = 50;
     protected final SearchHandler search;
     protected final ScrollHandler scroll;
-    protected DragHandler dragHandler;
+    protected final DragHandler drag;
 
     public WindowComponent(String label, SearchHandler searchHandler, int columns)
     {
@@ -21,6 +21,7 @@ public class WindowComponent extends GridParentComponent
         setWidth(110);
         setOpen(true);
 
+        drag = new DragHandler(this::getX, this::getY, this::setX, this::setY);
         scroll = new ScrollHandler(this, padding);
         search = searchHandler;
         animation.setStateHard(true);
@@ -44,18 +45,8 @@ public class WindowComponent extends GridParentComponent
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
     {
         super.render(graphics, mouseX, mouseY, partialTicks);
-        if (dragHandler == null)
-        {
-            this.dragHandler = new DragHandler(getX(), getY());
-        }
-
         scroll.handleRender(mouseX, mouseY, partialTicks);
-        dragHandler.handleRender(mouseX, mouseY);
-        if (dragHandler.isDragging())
-        {
-            setX(dragHandler.getX());
-            setY(dragHandler.getY());
-        }
+        drag.handleRender(mouseX, mouseY);
     }
 
     @Override
@@ -87,12 +78,7 @@ public class WindowComponent extends GridParentComponent
             }
         }
 
-        if (dragHandler == null)
-        {
-            this.dragHandler = new DragHandler(getX(), getY());
-        }
-
-        dragHandler.handleMouseClicked((float) mouseX, (float) mouseY, button,
+        drag.handleMouseClicked((float) mouseX, (float) mouseY, button,
                 mouseWithinBounds(
                         mouseX,
                         mouseY,
@@ -106,12 +92,7 @@ public class WindowComponent extends GridParentComponent
     public void mouseReleased(double mouseX, double mouseY, int button)
     {
         super.mouseReleased(mouseX, mouseY, button);
-        if (dragHandler == null)
-        {
-            dragHandler = new DragHandler(getX(), getY());
-        }
-
-        dragHandler.setDragging(false);
+        drag.setDragging(false);
     }
 
     @Override

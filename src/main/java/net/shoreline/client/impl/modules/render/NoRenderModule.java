@@ -1,12 +1,25 @@
 package net.shoreline.client.impl.modules.render;
 
 import lombok.Getter;
+import net.minecraft.client.multiplayer.resolver.AddressCheck;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.feature.ModelPartFeatureRenderer;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
-import net.shoreline.client.api.setting.impl.BooleanSetting;
-import net.shoreline.client.api.setting.impl.NumberSetting;
-import net.shoreline.client.api.setting.impl.SettingGroup;
+import net.shoreline.client.api.setting.impl.*;
+import net.shoreline.client.impl.event.render.*;
+import net.shoreline.eventbus.api.Subscribe;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NoRenderModule extends Toggleable
 {
@@ -48,6 +61,10 @@ public class NoRenderModule extends Toggleable
             .setMin(3).setDefaultValue(16).setMax(16)
             .setVisible(() -> !totemEffects.getValue())
             .setDescription("The number of particles for the totem effect").build();
+    Setting<Integer> totemTicks = new NumberSetting.Builder<Integer>("TotemTicks")
+            .setMin(5).setDefaultValue(30).setMax(30)
+            .setVisible(() -> !totemEffects.getValue())
+            .setDescription("The time in ticks that the totem effect will last").build();
     Setting<Boolean> fireEffect = new BooleanSetting.Builder("EntityFire")
             .setDescription("Cancels the fire effect on entities")
             .setDefaultValue(false).build();
@@ -104,8 +121,13 @@ public class NoRenderModule extends Toggleable
     Setting<Void> hudConfig = new SettingGroup.Builder("HUD")
             .addAll(potionsHud, itemName, toastConfig, textShadow).build();
 
-    Setting<Boolean> nauseaConfig = new BooleanSetting.Builder("Nausea")
-            .setDescription("Cancels the nausea effect")
+    Setting<Collection<Block>> blockBlackListConfig = new RegistrySetting.Builder<Block>("Blacklist")
+            .setValues(Blocks.CAVE_VINES, Blocks.CAVE_VINES_PLANT)
+            .setRegistry(BuiltInRegistries.BLOCK)
+            .setDescription("List of blocks that you dont want to render")
+            .build();
+    Setting<Boolean> blocksConfig = new ToggleableSettingGroup.Builder("Blocks")
+            .add(blockBlackListConfig)
             .setDefaultValue(false).build();
     Setting<Boolean> blindnessConfig = new BooleanSetting.Builder("Blindness")
             .setDescription("Cancels the blindness effect")
@@ -114,8 +136,226 @@ public class NoRenderModule extends Toggleable
             .setDescription("Cancels the totem pop animation")
             .setDefaultValue(false).build();
 
+    private final Set<ParticleType<?>> drippingParticles = new HashSet<>(Set.of
+    (
+        ParticleTypes.FALLING_OBSIDIAN_TEAR,
+        ParticleTypes.DRIPPING_OBSIDIAN_TEAR,
+        ParticleTypes.LANDING_OBSIDIAN_TEAR,
+        ParticleTypes.FALLING_DRIPSTONE_WATER,
+        ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+        ParticleTypes.FALLING_DRIPSTONE_LAVA,
+        ParticleTypes.DRIPPING_DRIPSTONE_LAVA,
+        ParticleTypes.FALLING_LAVA,
+        ParticleTypes.DRIPPING_LAVA,
+        ParticleTypes.FALLING_WATER,
+        ParticleTypes.DRIPPING_WATER,
+        ParticleTypes.FALLING_HONEY,
+        ParticleTypes.DRIPPING_HONEY,
+        ParticleTypes.FALLING_NECTAR
+    ));
+
     public NoRenderModule()
     {
         super("NoRender", "Removes annoying overlays", Category.RENDER);
+    }
+
+    @Subscribe
+    public void onTiltView(TiltViewEvent event)
+    {
+        if (hurtCam.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onRenderArmor(RenderArmorEvent event)
+    {
+        if (armor.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onFireOverlay(OverlayEvent.Fire event)
+    {
+        if (fireOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onWaterOverlay(OverlayEvent.Water event)
+    {
+        if (waterOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onBlocksOverlay(OverlayEvent.Blocks event)
+    {
+        if (blockOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onFrostbiteOverlay(OverlayEvent.Frostbite event)
+    {
+        if (frostbiteOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onSpyglassOverlay(OverlayEvent.Spyglass event)
+    {
+        if (spyglassOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onPortalOverlay(OverlayEvent.Portal event)
+    {
+        if (portalOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onBossBarOverlay(OverlayEvent.BossBar event)
+    {
+        if (bossBarOverlay.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onParticle(ParticleEvent event)
+    {
+        if (shouldCancelParticle(event.getType()))
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onPotionsHudOverlay(HudOverlayEvent.Potions event)
+    {
+        if (potionsHud.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onItemNameHudOverlay(HudOverlayEvent.ItemName event)
+    {
+        if (itemName.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onRenderGuiToast(RenderGuiToastEvent event)
+    {
+        if (toastConfig.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onRenderEntityFire(RenderOnFireEvent event)
+    {
+        if (fireEffect.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onRenderFloatingItem(RenderFloatingItemEvent event)
+    {
+        if (totemConfig.getValue() && event.getStack().getItem() == Items.TOTEM_OF_UNDYING)
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onGlyphShadow(GlyphShadowEvent event)
+    {
+        if (textShadow.getValue())
+        {
+            event.setCanceled(true);
+            event.setShadowOffset(0.5f);
+        }
+    }
+
+    @Subscribe
+    public void onEmitParticle(EmitParticleEvent event)
+    {
+        if (event.getEffect() != ParticleTypes.TOTEM_OF_UNDYING)
+        {
+            return;
+        }
+
+        if (totemEffects.getValue())
+        {
+            event.setCanceled(true);
+            event.setMaxCount(0);
+            return;
+        }
+
+        event.setMaxCount(totemParticles.getValue());
+        event.setMaxTicks(totemTicks.getValue());
+    }
+
+    @Subscribe
+    public void onEntityHurt(EntityHurtEvent event)
+    {
+        if (hurt.getValue())
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    @Subscribe
+    public void onRenderBlock(RenderBlockEvent event)
+    {
+        if (!blocksConfig.getValue())
+        {
+            return;
+        }
+
+        Block block = event.getState().getBlock();
+        if (((RegistrySetting<Block>) blockBlackListConfig).contains(block))
+        {
+            event.setCanceled(true);
+        }
+    }
+
+    private boolean shouldCancelParticle(ParticleType<?> type)
+    {
+        return type == ParticleTypes.ENTITY_EFFECT && statusEffectsConfig.getValue()
+                || (type == ParticleTypes.EXPLOSION || type == ParticleTypes.EXPLOSION_EMITTER) && explosionsConfig.getValue()
+                || type == ParticleTypes.FIREWORK && fireworkConfig.getValue()
+                || (type == ParticleTypes.EFFECT || type == ParticleTypes.INSTANT_EFFECT) && splashConfig.getValue()
+                || (type == ParticleTypes.PORTAL || type == ParticleTypes.REVERSE_PORTAL) && portalConfig.getValue()
+                || type == ParticleTypes.BLOCK && walkingConfig.getValue()
+                || type == ParticleTypes.ITEM && eatingConfig.getValue()
+                || drippingParticles.contains(type) && drippingBlocksConfig.getValue();
     }
 }

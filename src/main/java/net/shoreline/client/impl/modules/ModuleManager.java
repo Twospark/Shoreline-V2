@@ -12,8 +12,7 @@ import net.shoreline.client.impl.event.ClientEvent;
 import net.shoreline.client.impl.event.input.KeyboardEvent;
 import net.shoreline.client.impl.modules.client.*;
 import net.shoreline.client.impl.modules.combat.*;
-import net.shoreline.client.impl.modules.hud.ModulesElement;
-import net.shoreline.client.impl.modules.hud.WatermarkElement;
+import net.shoreline.client.impl.modules.hud.*;
 import net.shoreline.client.impl.modules.misc.*;
 import net.shoreline.client.impl.modules.movement.SprintModule;
 import net.shoreline.client.impl.modules.movement.VelocityModule;
@@ -78,7 +77,11 @@ public class ModuleManager extends RegistryFeature<Module>
                 new SpeedMineModule(),
                 new TimerModule(),
 
+                new BrandHudElement(),
+                new CoordinatesElement(),
+                new MobEffectsElement(),
                 new ModulesElement(),
+                new PingElement(),
                 new WatermarkElement()
         );
 
