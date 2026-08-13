@@ -2,8 +2,7 @@ package net.shoreline.client.asm.mixins.sodium;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.shoreline.client.impl.event.render.RenderBlockEvent;
-import net.shoreline.eventbus.EventBus;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,10 +20,7 @@ public class MixinAbstractBlockRenderContext
     @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true, remap = false)
     private void shouldDrawSideHook(Direction facing, CallbackInfoReturnable<Boolean> cir)
     {
-        RenderBlockEvent event = new RenderBlockEvent(state);
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getBlocksConfig().getValue()) {
             cir.cancel();
             cir.setReturnValue(false);
         }

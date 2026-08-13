@@ -1,8 +1,7 @@
 package net.shoreline.client.asm.mixins.entity;
 
 import net.minecraft.world.entity.Entity;
-import net.shoreline.client.impl.event.render.RenderOnFireEvent;
-import net.shoreline.eventbus.EventBus;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,10 +13,7 @@ public class MixinEntity
     @Inject(method = "displayFireAnimation", at = @At(value = "HEAD"), cancellable = true)
     private void displayFireAnimationHook(CallbackInfoReturnable<Boolean> cir)
     {
-        RenderOnFireEvent renderFireEntityEvent = new RenderOnFireEvent();
-        EventBus.getInstance().post(renderFireEntityEvent);
-        if (renderFireEntityEvent.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getFireEffect().getValue()) {
             cir.cancel();
             cir.setReturnValue(false);
         }
