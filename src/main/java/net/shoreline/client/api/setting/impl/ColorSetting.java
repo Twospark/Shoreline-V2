@@ -81,6 +81,12 @@ public class ColorSetting extends Setting<Color>
         setValue(ColorUtil.withTransparency(getValue(), finalAlpha));
     }
 
+    public void setValueAlpha(Color color)
+    {
+        Color noAlpha = ColorUtil.withTransparency(color, getValue().getAlpha());
+        super.setValue(noAlpha);
+    }
+
     public static class Builder extends SettingBuilder<Color>
     {
         private boolean transparency;

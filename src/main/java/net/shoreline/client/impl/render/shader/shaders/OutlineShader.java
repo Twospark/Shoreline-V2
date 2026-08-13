@@ -2,7 +2,6 @@ package net.shoreline.client.impl.render.shader.shaders;
 
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostChainConfig;
-import net.minecraft.client.renderer.ShaderManager;
 import net.shoreline.client.impl.modules.render.ShaderModule;
 import net.shoreline.client.impl.render.shader.AbstractShaderChain;
 import net.shoreline.client.impl.render.shader.uniform.UniformBuilder;
@@ -12,7 +11,7 @@ import java.util.Map;
 
 public class OutlineShader extends AbstractShaderChain<ShaderModule>
 {
-    public OutlineShader() throws ShaderManager.CompilationException
+    public OutlineShader()
     {
         super("outline");
     }
@@ -20,15 +19,23 @@ public class OutlineShader extends AbstractShaderChain<ShaderModule>
     @Override
     public PostChainConfig createConfig(String name)
     {
-        PostChainConfig.TargetInput outlineTarget = new PostChainConfig.TargetInput(
-                "Texture", PostChain.MAIN_TARGET_ID, false, false);
-        PostChainConfig.Pass pass =
-                new PostChainConfig.Pass(
-                        BASE, getIdentifier(),
-                        List.of(outlineTarget),
-                        PostChain.MAIN_TARGET_ID,
-                        Map.of("OutlineConfig", List.of(i(1), f(0.5f), f(1.0f)),
-                                "BaseConfig", List.of(vec2(1.0f, 1.0f))));
+        PostChainConfig.TargetInput outlineInput = new PostChainConfig.TargetInput(
+                "Texture",
+                SOURCE,
+                false,
+                false
+        );
+
+        PostChainConfig.Pass pass = new PostChainConfig.Pass(
+                BASE,
+                getIdentifier(),
+                List.of(outlineInput),
+                PostChain.MAIN_TARGET_ID,
+                Map.of("OutlineConfig", List.of(
+                        i(1),
+                        f(0.5f),
+                        f(1.0f)))
+        );
 
         return new PostChainConfig(Map.of(), List.of(pass));
     }
@@ -37,8 +44,8 @@ public class OutlineShader extends AbstractShaderChain<ShaderModule>
     public void buildUniforms(ShaderModule provider, UniformBuilder builder)
     {
         builder.add("OutlineConfig",
-                f(provider.getWidth().getValue()),
-                f(provider.getFillOpacity().getValue()),
-                f(provider.getOutlineOpacity().getValue()));
+            f(provider.getWidth().getValue()),
+            f(provider.getFillOpacity().getValue()),
+            f(provider.getOutlineOpacity().getValue()));
     }
 }

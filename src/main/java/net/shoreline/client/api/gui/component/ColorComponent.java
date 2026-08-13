@@ -2,9 +2,12 @@ package net.shoreline.client.api.gui.component;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
+import net.shoreline.client.api.gui.Theme;
 import net.shoreline.client.api.gui.api.Interactable;
 import net.shoreline.client.api.gui.handler.NumberHandler;
+import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.impl.ColorSetting;
+import net.shoreline.client.impl.modules.client.ThemeModule;
 import net.shoreline.client.impl.render.ColorUtil;
 import net.shoreline.client.impl.render.Render2DUtil;
 import net.shoreline.client.impl.render.animation.Smoother;
@@ -111,6 +114,16 @@ public class ColorComponent extends ParentComponent
                     Render2DUtil.drawRect(graphics, pickerX, sliderY, pickerX + pickerW, sliderY + sliderH, 0xFFFFFFFF);
                 }
             });
+        }
+
+        if (setting != ThemeModule.INSTANCE.getPrimarySetting())
+        {
+            BooleanSetting global = (BooleanSetting) new BooleanSetting.Builder("Global")
+                    .setDescription("Global setting for color picker")
+                    .setDefaultValue(setting.isGlobal()).build();
+
+            global.addObserver(setting::setGlobal);
+            components.add(global.getComponent());
         }
     }
 

@@ -35,6 +35,7 @@
     "render.MixinGlyphInfo",
     "render.MixinLevelRenderer",
     "render.MixinNativeImage",
+    "render.MixinRenderType",
     "render.entity.MixinEntityRenderDispatcher",
     "render.entity.MixinLivingEntityRenderer",
     "render.entity.feature.MixinHumanoidArmorLayer",

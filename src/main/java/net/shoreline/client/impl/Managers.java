@@ -12,7 +12,8 @@ import net.shoreline.client.impl.mining.MiningManager;
 import net.shoreline.client.impl.modules.ModuleManager;
 import net.shoreline.client.impl.network.NetworkManager;
 import net.shoreline.client.impl.render.TextManager;
-import net.shoreline.client.impl.render.shader.ShaderManager;
+import net.shoreline.client.impl.render.shader.ShaderPass;
+import net.shoreline.client.impl.render.shader.ShaderPasses;
 import net.shoreline.client.impl.rotation.RotationManager;
 import net.shoreline.client.impl.social.SocialManager;
 import net.shoreline.eventbus.EventBus;
@@ -32,13 +33,11 @@ public class Managers
     public static MiningManager MINING;
     public static TargetManager TARGETING;
     public static CommandManager COMMANDS;
-    public static ShaderManager SHADER;
 
     public void init()
     {
         NETWORK     = new NetworkManager();
         MODULES     = new ModuleManager();
-        TEXT        = new TextManager();
         ROTATION    = new RotationManager();
         INVENTORY   = new InventoryManager();
         FALL_DIST   = new FallDistManager();
@@ -54,6 +53,7 @@ public class Managers
 
     public void postInit()
     {
-        SHADER = new ShaderManager();
+        TEXT = new TextManager();
+        ShaderPasses.init();
     }
 }

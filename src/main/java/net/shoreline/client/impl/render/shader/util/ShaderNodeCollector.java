@@ -1,6 +1,7 @@
 package net.shoreline.client.impl.render.shader.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.QuadInstance;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -120,7 +121,15 @@ public class ShaderNodeCollector extends SubmitNodeStorage
                            List<BakedQuad> quads,
                            ItemStackRenderState.FoilType foilType)
     {
+        bufferSource.setColor(color);
+        for (BakedQuad quad : quads)
+        {
+            BakedQuad.MaterialInfo material = quad.materialInfo();
+            RenderType type = material.itemRenderType();
 
+            VertexConsumer consumer = bufferSource.getBuffer(type);
+            consumer.putBakedQuad(poseStack.last(), quad, new QuadInstance());
+        }
     }
 
     @Override

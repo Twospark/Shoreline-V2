@@ -8,6 +8,7 @@ import net.shoreline.client.Shoreline;
 import net.shoreline.client.api.thread.ShorelineExecutor;
 import net.shoreline.client.asm.ducks.IMinecraft;
 import net.shoreline.client.impl.event.ClientEvent;
+import net.shoreline.client.impl.event.GameLoopEvent;
 import net.shoreline.client.impl.event.LevelEvent;
 import net.shoreline.client.impl.event.TickEvent;
 import net.shoreline.client.impl.event.render.ScreenEvent;
@@ -46,6 +47,13 @@ public abstract class MixinMinecraft implements IMinecraft
     {
         Shoreline.postInit();
         ClientEvent.McLoaded event = new ClientEvent.McLoaded();
+        EventBus.getInstance().post(event);
+    }
+
+    @Inject(method = "run", at = @At(value = "HEAD"))
+    private void runHook(CallbackInfo info)
+    {
+        GameLoopEvent event = new GameLoopEvent();
         EventBus.getInstance().post(event);
     }
 

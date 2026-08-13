@@ -7,25 +7,39 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Getter;
 import net.shoreline.client.api.common.Feature;
 
-// doesn't really need to be a manager.
 @Getter
-public class ShaderManager extends Feature
+public class ShaderPass extends Feature
 {
     private final RenderTarget target;
+    private final RenderTarget output;
     private final CrossFrameResourcePool pool;
 
-    public ShaderManager()
+    public ShaderPass(String name)
     {
-        super("Shaders");
-        this.target = new TextureTarget("shoreline_shader",
-                mc.getWindow().getWidth(), mc.getWindow().getHeight(), true);
+        super(name);
+        int width = mc.getWindow().getWidth();
+        int height = mc.getWindow().getHeight();
+        this.target = new TextureTarget(
+                "shoreline_shader_" + name,
+                width,
+                height,
+                true
+        );
+
+        this.output = new TextureTarget(
+                "shoreline_shader_" + name + "_output",
+                width,
+                height,
+                false
+        );
+
         this.pool = new CrossFrameResourcePool(3);
     }
 
     public void begin()
     {
         resize();
-        clear();
+        clearTarget();
     }
 
     public void bind()
@@ -42,9 +56,10 @@ public class ShaderManager extends Feature
 
     public <S> void draw(AbstractShaderChain<S> chain, S provider)
     {
+        clearOutput();
         chain.setUniforms(provider);
-        chain.draw(target, pool);
-        target.blitAndBlendToTexture(mc.getMainRenderTarget().getColorTextureView());
+        chain.draw(target, output, pool);
+        output.blitAndBlendToTexture(mc.getMainRenderTarget().getColorTextureView());
         pool.endFrame();
     }
 
@@ -52,14 +67,23 @@ public class ShaderManager extends Feature
     {
         int width = mc.getWindow().getWidth();
         int height = mc.getWindow().getHeight();
-        if (width != target.width || height != target.height)
+
+        if (width == target.width && height == target.height)
         {
-            target.resize(width, height);
+            return;
         }
+
+        target.resize(width, height);
+        output.resize(width, height);
     }
 
-    private void clear()
+    public void clearTarget()
     {
         RenderSystem.getDevice().createCommandEncoder().clearColorAndDepthTextures(target.getColorTexture(), 0, target.getDepthTexture(), 1.0);
+    }
+
+    public void clearOutput()
+    {
+        RenderSystem.getDevice().createCommandEncoder().clearColorTexture(output.getColorTexture(), 0);
     }
 }

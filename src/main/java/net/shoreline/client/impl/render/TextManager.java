@@ -15,7 +15,7 @@ import net.shoreline.eventbus.api.Subscribe;
 @Getter
 public class TextManager implements Globals
 {
-    private CustomFontRenderer renderer;
+    private CustomFontRenderer renderer = new CustomFontRenderer("Verdana", 9);
 
     public TextManager()
     {

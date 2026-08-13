@@ -12,10 +12,8 @@ layout(std140) uniform OutlineConfig
     float u_OutlineOpacity;
 };
 
-in vec2 texCoord;
 out vec4 fragColor;
 
-// produces some weird artifacts...
 void main()
 {
     vec4 center = texture(TextureSampler, v_TexCoord);
@@ -44,6 +42,7 @@ void main()
             if (offset.a != 0 && offset.a > center.a)
             {
                 center = offset;
+                break;
             }
         }
     }

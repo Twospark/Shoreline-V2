@@ -2,6 +2,7 @@ package net.shoreline.client.impl.modules.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -10,22 +11,32 @@ import net.minecraft.world.phys.Vec3;
 import net.shoreline.client.api.module.Category;
 import net.shoreline.client.api.module.Toggleable;
 import net.shoreline.client.api.setting.Setting;
+import net.shoreline.client.api.setting.impl.BooleanSetting;
 import net.shoreline.client.api.setting.impl.ColorSetting;
+import net.shoreline.client.api.setting.impl.EnumSetting;
 import net.shoreline.client.api.setting.impl.NumberSetting;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.ClientEvent;
 import net.shoreline.client.impl.event.render.RenderWorldEvent;
 import net.shoreline.client.impl.event.render.ShaderEvent;
-import net.shoreline.client.impl.render.shader.ShaderManager;
+import net.shoreline.client.impl.render.shader.AbstractShaderChain;
+import net.shoreline.client.impl.render.shader.ShaderPass;
+import net.shoreline.client.impl.render.shader.ShaderPasses;
 import net.shoreline.client.impl.render.shader.shaders.OutlineShader;
 import net.shoreline.client.impl.render.shader.util.ShaderNodeCollector;
 import net.shoreline.eventbus.api.Subscribe;
 
 import java.awt.*;
+import java.util.Objects;
 
 @Getter
 public class ShaderModule extends Toggleable
 {
+    public static ShaderModule INSTANCE;
+
+    Setting<EnumShader> mode = new EnumSetting.Builder<EnumShader>("Shader")
+            .setDefaultValue(EnumShader.OUTLINE)
+            .setDescription("The shader mode to use").build();
     Setting<Float> width = new NumberSetting.Builder<Float>("Width")
             .setMin(0f).setMax(5f).setDefaultValue(1f)
             .setDescription("The width of the shader outline").build();
@@ -39,24 +50,14 @@ public class ShaderModule extends Toggleable
             .setDescription("The shader color")
             .setDefaultValue(Color.PINK).build();
 
-    private OutlineShader outline;
+    Setting<Boolean> hands = new BooleanSetting.Builder("Hands")
+            .setDescription("Renders a shader over your hands")
+            .setDefaultValue(true).build();
 
     public ShaderModule()
     {
         super("Shader", "Renders a shader over entities", Category.RENDER);
-    }
-
-    @Subscribe
-    public void onLoaded(ClientEvent.McLoaded event)
-    {
-        try
-        {
-            outline = new OutlineShader();
-        }
-        catch (net.minecraft.client.renderer.ShaderManager.CompilationException e)
-        {
-            e.printStackTrace();
-        }
+        INSTANCE = this;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -71,7 +72,7 @@ public class ShaderModule extends Toggleable
         PoseStack poseStack = event.getPoseStack();
         Vec3 camPos = event.getCamera().pos;
 
-        ShaderManager shader = Managers.SHADER;
+        ShaderPass shader = ShaderPasses.ENTITIES;
         shader.begin();
 
         OutlineBufferSource bufferSource = new OutlineBufferSource();
@@ -109,18 +110,31 @@ public class ShaderModule extends Toggleable
     @Subscribe
     public void onShader(ShaderEvent event)
     {
-        if (outline == null)
-        {
-            try
-            {
-                outline = new OutlineShader();
-            }
-            catch (net.minecraft.client.renderer.ShaderManager.CompilationException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
+        AbstractShaderChain<ShaderModule> chain = mode.getValue().getShader();
+        ShaderPasses.ENTITIES.draw(chain, this);
+        ShaderPasses.HANDS.draw(chain, this);
 
-        Managers.SHADER.draw(outline, this);
+        ShaderPasses.ENTITIES.clearTarget();
+        ShaderPasses.HANDS.clearTarget();
+        ShaderPasses.ENTITIES.clearOutput();
+        ShaderPasses.HANDS.clearOutput();
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum EnumShader
+    {
+        OUTLINE
+        {
+            AbstractShaderChain<ShaderModule> cached;
+
+            @Override
+            public AbstractShaderChain<ShaderModule> getShader()
+            {
+                return Objects.requireNonNullElseGet(cached, OutlineShader::new);
+            }
+        };
+
+        public abstract AbstractShaderChain<ShaderModule> getShader();
     }
 }
