@@ -199,7 +199,7 @@ public class GlyphCache implements Globals
     }
 
     /**
-     * Exists purely because we dont want to use
+     * Exists purely because we don't want to use
      * {@link FilterMode#NEAREST} for font rendering.
      */
     private static class FontTexture extends DynamicTexture

@@ -1,11 +1,13 @@
 package net.shoreline.client.asm.mixins.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.item.ItemStack;
 import net.shoreline.client.impl.event.render.RenderBlockOutlineEvent;
 import net.shoreline.client.impl.event.render.RenderFloatingItemEvent;
+import net.shoreline.client.impl.event.render.ShaderEvent;
 import net.shoreline.client.impl.event.render.TiltViewEvent;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +19,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer
 {
+    @Inject(
+            method = "renderLevel",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GameRenderer;" +
+                            "renderItemInHand(Lnet/minecraft/client/renderer/state/level/CameraRenderState;" +
+                            "FLorg/joml/Matrix4fc;)V",
+                    shift = At.Shift.AFTER))
+    private void renderLevelHook_Hand(DeltaTracker deltaTracker, CallbackInfo info)
+    {
+        ShaderEvent event = new ShaderEvent();
+        EventBus.getInstance().post(event);
+    }
+
     @Inject(method = "shouldRenderBlockOutline", at = @At(value = "HEAD"), cancellable = true)
     private void shouldRenderBlockOutlineHook(CallbackInfoReturnable<Boolean> cir)
     {

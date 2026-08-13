@@ -31,6 +31,7 @@
     "level.MixinClientLevel",
     "render.MixinDeltaTrackerTimer",
     "render.MixinGameRenderer",
+    "render.MixinGLBuffer",
     "render.MixinGlyphInfo",
     "render.MixinLevelRenderer",
     "render.MixinNativeImage",
@@ -39,6 +40,8 @@
     "render.entity.feature.MixinHumanoidArmorLayer",
     "render.particle.MixinParticleEngine",
     "render.particle.MixinTrackingEmitter",
+    "render.post.MixinPostChain",
+    "render.post.MixinPostPass",
     "sodium.MixinAbstractBlockRenderContext",
     "sodium.MixinBlockRenderer"
   ],

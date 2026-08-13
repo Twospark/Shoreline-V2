@@ -52,16 +52,29 @@ public class FontModule extends Toggleable
 
     public void close()
     {
-        Managers.TEXT.getRenderer().close();
+        if (Managers.TEXT.getRenderer() != null)
+        {
+            Managers.TEXT.getRenderer().close();
+        }
     }
 
     public void setFont(String fontName)
     {
+        if (mc.getWindow() == null)
+        {
+            return;
+        }
+
         Managers.TEXT.setRenderer(fontName, fontSize.getValue());
     }
 
     public void setFont(int size)
     {
+        if (mc.getWindow() == null)
+        {
+            return;
+        }
+
         Managers.TEXT.setRenderer(fontName.getValue(), size);
     }
 }

@@ -24,6 +24,7 @@ public class Shoreline
 
     public static void postInit()
     {
+        Managers.postInit();
     }
 
     public static void info(String message)

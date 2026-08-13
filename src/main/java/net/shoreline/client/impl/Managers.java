@@ -12,6 +12,7 @@ import net.shoreline.client.impl.mining.MiningManager;
 import net.shoreline.client.impl.modules.ModuleManager;
 import net.shoreline.client.impl.network.NetworkManager;
 import net.shoreline.client.impl.render.TextManager;
+import net.shoreline.client.impl.render.shader.ShaderManager;
 import net.shoreline.client.impl.rotation.RotationManager;
 import net.shoreline.client.impl.social.SocialManager;
 import net.shoreline.eventbus.EventBus;
@@ -31,6 +32,7 @@ public class Managers
     public static MiningManager MINING;
     public static TargetManager TARGETING;
     public static CommandManager COMMANDS;
+    public static ShaderManager SHADER;
 
     public void init()
     {
@@ -48,5 +50,10 @@ public class Managers
         CONFIG      = new ConfigManager(); // configs last.
 
         EventBus.getInstance().post(new ClientEvent.Loaded());
+    }
+
+    public void postInit()
+    {
+        SHADER = new ShaderManager();
     }
 }

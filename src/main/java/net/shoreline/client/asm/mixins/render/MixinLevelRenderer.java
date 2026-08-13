@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.chunk.ChunkSectionsToRender;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.shoreline.client.impl.event.render.RenderEntityEvent;
 import net.shoreline.client.impl.event.render.RenderWorldEvent;
 import net.shoreline.client.impl.render.ClientRenderer;
 import net.shoreline.eventbus.EventBus;
@@ -48,7 +47,7 @@ public class MixinLevelRenderer
         matrices.mulPose(Axis.YP.rotationDegrees(minecraft.gameRenderer.getMainCamera().yRot() + 180f));
 
         ClientRenderer renderer = new ClientRenderer(minecraft.renderBuffers().bufferSource(), matrices.last());
-        RenderWorldEvent event = new RenderWorldEvent(renderer, deltaTracker.getGameTimeDeltaPartialTick(false));
+        RenderWorldEvent event = new RenderWorldEvent(renderer, matrices, cameraState, deltaTracker.getGameTimeDeltaPartialTick(false));
         EventBus.getInstance().post(event);
         renderer.flush();
 

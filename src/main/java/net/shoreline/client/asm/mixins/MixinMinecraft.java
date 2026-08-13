@@ -44,6 +44,7 @@ public abstract class MixinMinecraft implements IMinecraft
             shift = At.Shift.AFTER))
     private static void ctrHook_Finished(GameConfig gameConfig, CallbackInfo ci)
     {
+        Shoreline.postInit();
         ClientEvent.McLoaded event = new ClientEvent.McLoaded();
         EventBus.getInstance().post(event);
     }

@@ -7,8 +7,8 @@ import net.shoreline.eventbus.api.Listener;
 
 public class Feature implements Identifiable, Globals
 {
-    private final String name;
-    private final String[] nameAliases;
+    protected final String name;
+    protected final String[] nameAliases;
 
     public Feature(String name)
     {
