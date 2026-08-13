@@ -3,9 +3,9 @@ package net.shoreline.client.asm.mixins.render.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TrackingEmitter;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
-import net.shoreline.client.impl.event.render.EmitParticleEvent;
-import net.shoreline.eventbus.EventBus;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -31,19 +31,28 @@ public class MixinTrackingEmitter
     @Inject(method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/particles/ParticleOptions;)V", at = @At(value = "RETURN"))
     private void ctrHook(ClientLevel level, Entity entity, ParticleOptions particleType, CallbackInfo info)
     {
-        EmitParticleEvent event = new EmitParticleEvent(particleType);
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
-            lifeTime = event.getMaxTicks();
+        if (particleType != ParticleTypes.TOTEM_OF_UNDYING) return;
+
+        if (NoRenderModule.INSTANCE.isEnabled()) {
+            if (NoRenderModule.INSTANCE.getTotemEffects().getValue()) {
+                this.lifeTime = 0;
+            } else {
+                this.lifeTime = NoRenderModule.INSTANCE.getTotemTicks().getValue();
+            }
         }
     }
 
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 16))
     private int hookTickCount(int constant)
     {
-        EmitParticleEvent event = new EmitParticleEvent(particleType);
-        EventBus.getInstance().post(event);
-        return event.isCanceled() ? event.getMaxCount() : constant;
+        if (this.particleType != ParticleTypes.TOTEM_OF_UNDYING) return constant;
+
+        if (NoRenderModule.INSTANCE.isEnabled()) {
+            if (NoRenderModule.INSTANCE.getTotemEffects().getValue()) {
+                return 0;
+            }
+            return NoRenderModule.INSTANCE.getTotemParticles().getValue();
+        }
+        return constant;
     }
 }

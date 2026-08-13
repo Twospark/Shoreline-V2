@@ -3,7 +3,7 @@ package net.shoreline.client.asm.mixins.render.particle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleOptions;
-import net.shoreline.client.impl.event.render.ParticleEvent;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,10 +23,7 @@ public class MixinParticleEngine
                                     double za,
                                     CallbackInfoReturnable<Particle> cir)
     {
-        ParticleEvent event = new ParticleEvent(options.getType());
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.shouldCancelParticle(options.getType())) {
             cir.cancel();
             cir.setReturnValue(null);
         }
