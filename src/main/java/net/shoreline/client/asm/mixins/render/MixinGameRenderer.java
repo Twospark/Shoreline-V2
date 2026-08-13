@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.state.GameRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.shoreline.client.impl.Managers;
 import net.shoreline.client.impl.event.render.RenderBlockOutlineEvent;
-import net.shoreline.client.impl.event.render.RenderFloatingItemEvent;
 import net.shoreline.client.impl.event.render.ShaderEvent;
-import net.shoreline.client.impl.event.render.TiltViewEvent;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import net.shoreline.client.impl.modules.render.ShaderModule;
 import net.shoreline.client.impl.render.shader.ShaderPass;
 import net.shoreline.client.impl.render.shader.ShaderPasses;
@@ -84,10 +84,7 @@ public abstract class MixinGameRenderer
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
     private void bobHurtHook(CameraRenderState cameraState, PoseStack poseStack, CallbackInfo info)
     {
-        TiltViewEvent event = new TiltViewEvent();
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getHurtCam().getValue()) {
             info.cancel();
         }
     }
@@ -95,10 +92,7 @@ public abstract class MixinGameRenderer
     @Inject(method = "displayItemActivation", at = @At(value = "HEAD"), cancellable = true)
     private void displayItemActivationHook(ItemStack itemStack, CallbackInfo info)
     {
-        RenderFloatingItemEvent event = new RenderFloatingItemEvent(itemStack);
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getTotemConfig().getValue() && itemStack.is(Items.TOTEM_OF_UNDYING)) {
             info.cancel();
         }
     }
