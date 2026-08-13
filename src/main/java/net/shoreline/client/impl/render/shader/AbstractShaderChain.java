@@ -23,14 +23,12 @@ public abstract class AbstractShaderChain<S> extends Feature
     public AbstractShaderChain(String name) throws ShaderManager.CompilationException
     {
         super(name);
-        Projection projection = new Projection();
-        projection.setSize(0.1f, 1000.0f);
         this.writer = new UniformWriter();
         this.chain = PostChain.load(
                 createConfig(getName()), mc.getTextureManager(),
                 LevelTargetBundle.MAIN_TARGETS,
                 Identifier.fromNamespaceAndPath("shoreline", getName()),
-                projection, new ProjectionMatrixBuffer("shoreline_" + getName()));
+                new Projection(), new ProjectionMatrixBuffer("shoreline_" + getName()));
     }
 
     public abstract PostChainConfig createConfig(String name);

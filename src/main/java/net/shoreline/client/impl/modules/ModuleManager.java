@@ -81,6 +81,7 @@ public class ModuleManager extends RegistryFeature<Module>
 
                 new BrandHudElement(),
                 new CoordinatesElement(),
+                new FpsElement(),
                 new MobEffectsElement(),
                 new ModulesElement(),
                 new PingElement(),

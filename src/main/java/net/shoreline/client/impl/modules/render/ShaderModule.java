@@ -93,12 +93,7 @@ public class ShaderModule extends Toggleable
                 collector.setColor(color.getValue().getRGB());
 
                 poseStack.pushPose();
-                poseStack.translate(
-                        state.x - camPos.x,
-                        state.y - camPos.y,
-                        state.z - camPos.z
-                );
-
+                poseStack.translate(state.x - camPos.x, state.y - camPos.y, state.z - camPos.z);
                 renderer.submit(state, event.getPoseStack(), collector, event.getCamera());
                 poseStack.popPose();
             }
