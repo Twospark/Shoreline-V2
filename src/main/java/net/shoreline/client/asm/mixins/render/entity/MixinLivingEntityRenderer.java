@@ -6,10 +6,9 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.shoreline.client.api.interfaces.Globals;
 import net.shoreline.client.impl.Managers;
-import net.shoreline.client.impl.event.render.EntityHurtEvent;
 import net.shoreline.client.impl.modules.client.RotationsModule;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import net.shoreline.client.impl.rotation.handler.RotationRenderer;
-import net.shoreline.eventbus.EventBus;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -93,10 +92,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity,
                     opcode = Opcodes.GETFIELD))
     private static boolean hurtHook(LivingEntityRenderState instance)
     {
-        EntityHurtEvent event = new EntityHurtEvent();
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getHurt().getValue()) {
             return false;
         }
 

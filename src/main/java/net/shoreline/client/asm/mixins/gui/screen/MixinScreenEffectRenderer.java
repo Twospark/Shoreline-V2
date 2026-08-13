@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.shoreline.client.impl.event.render.OverlayEvent;
+import net.shoreline.client.impl.modules.render.NoRenderModule;
 import net.shoreline.eventbus.EventBus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,10 +23,7 @@ public class MixinScreenEffectRenderer
                                        TextureAtlasSprite sprite,
                                        CallbackInfo info)
     {
-        OverlayEvent.Fire event = new OverlayEvent.Fire();
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getFireOverlay().getValue()) {
             info.cancel();
         }
     }
@@ -37,10 +34,7 @@ public class MixinScreenEffectRenderer
                                         MultiBufferSource bufferSource,
                                         CallbackInfo info)
     {
-        OverlayEvent.Water event = new OverlayEvent.Water();
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getWaterOverlay().getValue()) {
             info.cancel();
         }
     }
@@ -51,10 +45,7 @@ public class MixinScreenEffectRenderer
                                       MultiBufferSource bufferSource,
                                       CallbackInfo info)
     {
-        OverlayEvent.Blocks event = new OverlayEvent.Blocks();
-        EventBus.getInstance().post(event);
-        if (event.isCanceled())
-        {
+        if (NoRenderModule.INSTANCE.isEnabled() && NoRenderModule.INSTANCE.getBlockOverlay().getValue()) {
             info.cancel();
         }
     }
